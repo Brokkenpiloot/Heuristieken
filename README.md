@@ -1,0 +1,2 @@
+# Heuristieken
+Case: RushHour
