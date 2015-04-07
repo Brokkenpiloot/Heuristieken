@@ -19,6 +19,23 @@ class Car(object):
         self.start_coordinate = start_coordinate
         self.length = length
 
+    def check(self):
+        # if horizontal
+        if self.orientation == 0:
+            if self.start_coordinate + length <= height:
+                # afhankelijk van position
+                if 0 <= y <= height:
+                    return true
+        # if vertical
+        elif self.orientation == 1:
+            if self.start_coordinate + length <= width:
+                # afhankelijk van position
+                if 0 <= x <= width:
+                    return true
+        else: 
+            return false
+        
+        
     # Uiteindelijk checks samenvoegen
     # Check toevoegen om te checken of orientation "horizontal" of "vertical" is.
     	# orientation zero = horizontal | one = vertical	
