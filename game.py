@@ -1,6 +1,17 @@
 # Heuristieken.
 # Joost Jason en Joren.
 # RushHour.
+# 
+
+class Board(object):
+    def __init__(self, height, width):
+        horizontal_tiles = [x for x in range(width)]
+        self.board = [horizontal_tiles for y in range(height)] 
+    def show(self):
+        for row in self.board:
+            print(row)
+
+        
 
 class Car(object):
     def __init__(self, orientation, start_coordinate, length):
