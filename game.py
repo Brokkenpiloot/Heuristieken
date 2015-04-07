@@ -10,32 +10,53 @@ class Board(object):
     def show(self):
         for row in self.board:
             print(row)
-
         
 
 class Car(object):
-    def __init__(self, orientation, start_coordinate, length):
+    def __init__(self, orientation, x, y, length, carID):
         self.orientation = orientation
-        self.start_coordinate = start_coordinate
+        self.x = x
+        self.y = y
         self.length = length
-
-    def check(self):
-        # if horizontal
-        if self.orientation == 0:
-            if self.start_coordinate + length <= height:
-                # afhankelijk van position
-                if 0 <= y <= height:
-                    return true
-        # if vertical
+        self.carID = carID
+        
+    def checkOrientation(self):
+        if self.orientation == 0: 
+            return horizontal
         elif self.orientation == 1:
-            if self.start_coordinate + length <= width:
-                # afhankelijk van position
-                if 0 <= x <= width:
-                    return true
-        else: 
-            return false
-        
-        
+            return vertical
+        else:
+            return 1
+
+    def checkCoordinate(self):
+        if (0 <= self.x < width) and (0 <= self.y < height):
+            return "X and Y coordinates exist"
+        else:
+            print self.x
+            print self.y
+            return 2
+    def checkSize(self):
+        switch(self.orientation) {
+            case 0:
+                if self.x + length < width: 
+                    return "Car fits on the board (horizontal)"  
+            case 1:
+                if self.y + length < height: 
+                    return "Car fits on the board (vertical)"  
+            default:
+                return 3
+                break;
+        }
+## Error List:
+#   1 = not horizontal or vertical 
+#   2 = Car coordinates car do not exist
+#   3 = Orientation is not equal to zero or one in Checksize
+    
+
+
+
+
+
     # Uiteindelijk checks samenvoegen
     # Check toevoegen om te checken of orientation "horizontal" of "vertical" is.
     	# orientation zero = horizontal | one = vertical	
@@ -56,5 +77,22 @@ class Car(object):
     	# 	if position x i == NULL:
     	# 		return false
 
+# def check(self):
+    #     # if horizontal
+    #     if self.orientation == 0:
+    #         # if start is on the bord 
+    #         if 0 <= self.x < height:
+    #             # if total size is on the bord
+    #             if self.x + length < width:
+    #                 return true
+    #     # if vertical
+    #     elif self.orientation == 1:
+    #         # if start is on the bord 
+    #         if 0 <= self.y < height:
+    #             # if total size is on the bord
+    #             if self.y+ length < height:
+    #                 return true
+    #     else: 
+    #         return false
 
         
