@@ -5,20 +5,25 @@
 
 class Board(object):
     def __init__(self, height, width):
-        horizontal_tiles = [x for x in range(width)]
+        # Generate empty board as list of lists
+        self.height = height
+        self.width = width
+        horizontal_tiles = ["empty" for x in range(width)]
         self.board = [horizontal_tiles for y in range(height)] 
     def show(self):
         for row in self.board:
             print(row)
-        
 
 class Car(object):
-    def __init__(self, orientation, x, y, length, carID):
+    def __init__(self, orientation, board, x, y, length, carID):
         self.orientation = orientation
+        # Position on board can be called by entering self.board[self.x][self.y]
+        self.board = board
         self.x = x
         self.y = y
         self.length = length
         self.carID = carID
+       
         
     def checkOrientation(self):
         if self.orientation == 0: 
