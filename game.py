@@ -8,14 +8,22 @@ class Board(object):
         # Generate empty board as list of lists
         self.height = height
         self.width = width
-        self.board = [["empty" for x in range(width)] for count in range(height)]
+        self.board = [["empty" for x in range(height)] for count in range(width)]
     def show(self):
         for row in self.board:
             print(row)    
-    def addCar(self, x, y, ID):
+    def addVerticalcar(self, x, y, ID):
         # TODO: create car object 
         
         self.board[x][y] = 'Car %d' %(ID)
+        self.board[x+1][y] = 'Car %d' %(ID)
+        
+    def addHorizontalcar(self, x, y, ID):
+        # TODO: create car object 
+        
+        self.board[x][y] = 'Car %d' %(ID)
+        self.board[x][y+1] = 'Car %d' %(ID)
+        
 
 class Car(object):
     def __init__(self, orientation, board, x, y, length, carID):
