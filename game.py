@@ -8,11 +8,14 @@ class Board(object):
         # Generate empty board as list of lists
         self.height = height
         self.width = width
-        horizontal_tiles = ["empty" for x in range(width)]
-        self.board = [horizontal_tiles for y in range(height)] 
+        self.board = [["empty" for x in range(width)] for count in range(height)]
     def show(self):
         for row in self.board:
-            print(row)
+            print(row)    
+    def addCar(self, x, y, ID):
+        # TODO: create car object 
+        
+        self.board[x][y] = 'Car %d' %(ID)
 
 class Car(object):
     def __init__(self, orientation, board, x, y, length, carID):
