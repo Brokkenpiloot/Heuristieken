@@ -25,90 +25,84 @@ class Board(object):
         self.board[x][y+1] = 'Car %d' %(ID)
         
 
-class Car(object):
-    def __init__(self, orientation, board, x, y, length, carID):
-        self.orientation = orientation
-        # Position on board can be called by entering self.board[self.x][self.y]
-        self.board = board
-        self.x = x
-        self.y = y
-        self.length = length
-        self.carID = carID
-       
-        
-    def checkOrientation(self):
-        if self.orientation == 0: 
-            return horizontal
-        elif self.orientation == 1:
-            return vertical
-        else:
-            return 1
+# class Car(object):
+#     def __init__(self, orientation, board, x, y, length, carID):
+#         self.orientation = orientation
+#         # Position on board can be called by entering self.board[self.x][self.y]
+#         self.board = board
+#         self.x = x
+#         self.y = y
+#         self.length = length
+#         self.carID = carID
 
-    def checkCoordinate(self):
-        if (0 <= self.x < width) and (0 <= self.y < height):
-            return "X and Y coordinates exist"
-        else:
-            print self.x
-            print self.y
-            return 2
-    def checkSize(self):
-        switch(self.orientation) {
-            case 0:
-                if self.x + length < width: 
-                    return "Car fits on the board (horizontal)"  
-            case 1:
-                if self.y + length < height: 
-                    return "Car fits on the board (vertical)"  
-            default:
-                return 3
-                break;
-        }
-## Error List:
-#   1 = not horizontal or vertical 
-#   2 = Car coordinates car do not exist
-#   3 = Orientation is not equal to zero or one in Checksize
-    
+# Initialize board, pass height en width parameters
+# Car ID Integer = 1
+# Voeg autos aan bord toe met addCar method en verhoog de car ID integer voor iedere auto 
+# Maak car objects aan voor iedere auto (kan misschien binnen addCar method) 
+
+def runSimulationGame1(height, width):
+
+    room = board(width, height)
+    # carID = 1
+
+    # addHorizontalCar(x, y, carID, length)
+    # red Car
+    addHorizontalCar(3, 2, 1, 2)
+
+    # Traffic
+    addVerticalCar(2, 0, 2, 3)
+    addHorizontalCar(3, 0, 3, 2)
+    addVerticalCar(5, 0, 4, 3)
+    addVerticalCar(3, 3, 5, 3)
+    addHorizontalcar(4, 3, 6, 2)
+    addVerticalCar(0, 4, 7, 2)
+    addHorizontalCar(1, 4, 8, 2)
+    addHorizontalCar(5, 4, 9, 2)   
+
+    room.show()
+
+def runSimulationGame2(height, width):
+    room = board(width, height)
+
+    # red car
+    addHorizontalCar(3, 2, 1, 2)
+
+    # Traffic
+    addHorizontalCar(2, 0, 2, 2)
+    addHorizontalCar(4, 0, 3, 2)
+    addHorizontalCar(1, 1, 4, 2)
+    addHorizontalCar(3, 1, 5, 2)
+    addVerticalCar(5, 1, 6, 3)
+    addVerticalCar(4, 2, 7, 2)
+    addHorizontalCar(0, 3, 8, 2)
+    addHorizontalCar(2, 3, 9, 2)
+    addVerticalCar(0, 4, 10, 2)
+    addVerticalCar(3, 4, 11, 2)
+    addHorizontalCar(4, 4, 12, 2)
+    addHorizontalCar(4, 5, 12, 2)
+
+    room.show()
+
+def runSimulationGame2(height, width):
+    room = board(width, height)
+
+    # red car
+    addHorizontalCar(0, 2, 1, 2)
+
+    # Traffic
+    addHorizontalCar(1, 0, 2, 2)
+    addHorizontalCar(3, 0, 3, 3)
+    addHorizontalCar(1, 1, 4, 2)
+    addVerticalCar(3, 1, 5, 2)
+    addHorizontalCar(4, 1, 6, 2)
+    addVerticalCar(2, 2, 7, 2)
+    addVerticalCar(5, 2, 8, 2)
+    addHorizontalCar(0, 3, 9, 2)
+    addHorizontalCar(3, 3, 10, 2)
+    addVerticalCar(0, 4, 11, 2)
+    addVerticalCar(2, 4, 12, 2)
+    addHorizontalCar(4, 4, 13, 2)
 
 
+    room.show()
 
-
-
-    # Uiteindelijk checks samenvoegen
-    # Check toevoegen om te checken of orientation "horizontal" of "vertical" is.
-    	# orientation zero = horizontal | one = vertical	
-    
-    # Check toevoegen of start_coordinate bestaat.
-    	# if x and y <= m or n
-
-    # Check toevoegen of start_coordinate + length past in het bord.
-    	# if orientation == zero:
-    		# check if coordinate x + length <=  m:
-    			# return true	
-    	#  if orientation == one:
-    		# check if coordinate x + length <=  n: 
-    			# # return true	 	
-
-    # Check toevoegen of alle in te vullen coordinaten niet al bezet zijn.
-    	# for i in (length - x): 
-    	# 	if position x i == NULL:
-    	# 		return false
-
-# def check(self):
-    #     # if horizontal
-    #     if self.orientation == 0:
-    #         # if start is on the bord 
-    #         if 0 <= self.x < height:
-    #             # if total size is on the bord
-    #             if self.x + length < width:
-    #                 return true
-    #     # if vertical
-    #     elif self.orientation == 1:
-    #         # if start is on the bord 
-    #         if 0 <= self.y < height:
-    #             # if total size is on the bord
-    #             if self.y+ length < height:
-    #                 return true
-    #     else: 
-    #         return false
-
-        
