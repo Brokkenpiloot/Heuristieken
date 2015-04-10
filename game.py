@@ -4,41 +4,72 @@
 # 
 
 class Board(object):
-    def __init__(self, height, width):
+    def __init__(self, width, height):
         # Generate empty board as list of lists
         self.height = height
         self.width = width
-        self.board = [["empty" for x in range(height)] for count in range(width)]
+        self.board = [["empty" for i in range(width)] for j in range(height)]
     def show(self):
         for row in self.board:
             print(row)    
-    def addVerticalcar(self, x, y, ID):
+    def addVerticalCar(self, x, y, ID, length):
         # TODO: create car object 
         
-        self.board[x][y] = 'Car %d' %(ID)
-        self.board[x+1][y] = 'Car %d' %(ID)
+        self.board[y][x] = 'Car %d' %(ID)
+        self.board[y+1][x] = 'Car %d' %(ID)
+        if length is 3:
+            self.board[y+2][x] = 'Car %d' %(ID)
         
-    def addHorizontalcar(self, x, y, ID):
+    def addHorizontalCar(self, x, y, ID, length):
         # TODO: create car object 
         
-        self.board[x][y] = 'Car %d' %(ID)
-        self.board[x][y+1] = 'Car %d' %(ID)
-        
+        self.board[y][x] = 'Car %d' %(ID)
+        self.board[y][x+1] = 'Car %d' %(ID)
+        if length is 3:
+            self.board[y][x+2] = 'Car %d' %(ID)
 
-# class Car(object):
-#     def __init__(self, orientation, board, x, y, length, carID):
-#         self.orientation = orientation
-#         # Position on board can be called by entering self.board[self.x][self.y]
-#         self.board = board
-#         self.x = x
-#         self.y = y
-#         self.length = length
-#         self.carID = carID
+    def checkIfEmpty(self, x, y):
+        if self.board[y][x] is 'empty':
+            return True
+        else:
+            return False
 
-# Initialize board, pass height en width parameters
-# Car ID Integer = 1
-# Voeg autos aan bord toe met addCar method en verhoog de car ID integer voor iedere auto 
-# Maak car objects aan voor iedere auto (kan misschien binnen addCar method) 
+    def checkCoordinate(self, x, y):
+        print(self.board[y][x])
+
+class Car(object):
+    def __init__(self, orientation, board, x, y, length, carID):
+        self.orientation = orientation
+        # Position on board can be called by entering self.board[self.x][self.y]
+        self.board = board
+        self.x = x
+        self.y = y
+        self.length = length
+        self.carID = carID
+        if orientation is 'horizontal':
+            board.addHorizontalCar(x, y, carID, self.length)
+        if orientation is 'vertical':
+            board.addVerticalCar(x, y, carID, self.length)
+
+    def isCarFree(self):
+        if self.orientation is 'horizontal':
+            if self.x - 1 < 0 or self.x + self.length >= self.board.width:
+                return False
+            if self.board.checkIfEmpty(self.x - 1,self.y) or \
+            self.board.checkIfEmpty(self.x + self.length,self.y):
+                return True
+            else:
+                return False
+
+            
+        if self.orientation is 'vertical':
+            if self.y - 1 < 0 or self.y + self.length >= self.board.height:
+                return False
+            if self.board.checkIfEmpty(self.x,self.y - 1) or \
+            self.board.checkIfEmpty(self.x,self.y + self.length):
+                return True
+            else:
+                return False
 
 def runSimulationGame1(height, width):
 
