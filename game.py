@@ -97,6 +97,13 @@ class Car(object):
                 return True
             else:
                 return False
+    #def move(self):
+         #if self.free == 'top':
+             #self.board[self.y+1][self.x] = 'Car %d' %(self.carID)
+             #self.board[self.y-1][self.x] = 'empty'
+
+
+         
 
 def runSimulationGame1(height, width):
 
@@ -128,7 +135,7 @@ def runSimulationGame1(height, width):
             freeCars.append(currentCar)
             
     moveCar = (random.choice(freeCars))
-    print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID)
+    print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
 
     # TODO moveCar.move()
 
@@ -136,7 +143,6 @@ def runSimulationGame1(height, width):
         
 
     
-    # print ("This car is free:", currentCar.isCarFree(), ", Car ID", currentCar.carID, currentCar.free)
 
     # Tijdelijk weggecomment zodat simulatie 1 gerund kan worden
     """   
