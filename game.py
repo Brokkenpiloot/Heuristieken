@@ -106,6 +106,7 @@ def runSimulationGame1(height, width):
     # addHorizontalCar(orientation, room, x, y, length, carID)
     # red Car
     carList = []
+    freeCars = []
     redCar = Car('horizontal', room, 3, 2, 2, 1)
 
     # Traffic
@@ -119,13 +120,23 @@ def runSimulationGame1(height, width):
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
-    
-    room.show()
-    for i in carList:
-        currentCar = i
-        print ("This car is free:", currentCar.isCarFree(), ", Car ID", currentCar.carID, currentCar.free)
 
-    #TODO: move etc.
+    # iterate door cars, voegt alle cars die free staan toe aan nieuwe list
+    room.show()
+    for currentCar in carList:
+        if currentCar.isCarFree():
+            freeCars.append(currentCar)
+            
+    moveCar = (random.choice(freeCars))
+    print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID)
+
+    # TODO moveCar.move()
+
+            
+        
+
+    
+    # print ("This car is free:", currentCar.isCarFree(), ", Car ID", currentCar.carID, currentCar.free)
 
     # Tijdelijk weggecomment zodat simulatie 1 gerund kan worden
     """   
