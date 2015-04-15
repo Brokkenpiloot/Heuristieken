@@ -1,8 +1,7 @@
 # Heuristieken.
 # Joost Jason en Joren.
 # RushHour.
-#
-import random
+# 
 
 import random
 
@@ -61,9 +60,7 @@ class Car(object):
             board.addVerticalCar(x, y, carID, self.length)
 
     def isCarFree(self):
-        # Functie heeft nog wat fouten
         if self.orientation is 'horizontal':
-<<<<<<< HEAD
             # werkt 
             if self.x - 1 < 0 and self.x + self.length >= self.board.width:
                 return False
@@ -78,16 +75,6 @@ class Car(object):
                 return True
             elif self.board.checkIfEmpty(self.x + self.length,self.y):
                 self.free = 'right'
-=======
-            # dit if-statement moet in ieder geval 'and' worden
-            if self.x - 1 < 0 or self.x + self.length >= self.board.width:
-                return False
-            # onderstaand if-statement geeft soms een 'list index out of range'
-            # als het bovenstaande if-statement 'and' gebruikt.
-            # we moeten even onderzoeken hoe dat samenhangt. 
-            if self.board.checkIfEmpty(self.x - 1,self.y) or \
-            self.board.checkIfEmpty(self.x + self.length,self.y):
->>>>>>> 9199e7cb11198a7c9545c12142febdc6c75f6afd
                 return True
             else:
                 return False
@@ -134,22 +121,12 @@ def runSimulationGame1(height, width):
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
     
     room.show()
-<<<<<<< HEAD
     for i in carList:
         currentCar = i
         print ("This car is free:", currentCar.isCarFree(), ", Car ID", currentCar.carID, currentCar.free)
 
     #TODO: move etc.
 
-=======
-    # Zoekt random Car en kijkt of ie free staat
-    # (kan misschien ook ergens anders als aparte method?)
-    currentCar = (random.choice(carList))
-    print ("This car is free:", currentCar.isCarFree(), ", Car ID", currentCar.carID)
-
-    #TODO: move etc.
-
->>>>>>> 9199e7cb11198a7c9545c12142febdc6c75f6afd
     # Tijdelijk weggecomment zodat simulatie 1 gerund kan worden
     """   
 def runSimulationGame2(height, width):
@@ -187,9 +164,5 @@ def runSimulationGame2(height, width):
     addVerticalCar(0, 4, 11, 2)
     addVerticalCar(2, 4, 12, 2)
     addHorizontalCar(4, 4, 13, 2)
-<<<<<<< HEAD
-=======
-
->>>>>>> 9199e7cb11198a7c9545c12142febdc6c75f6afd
 """
     room.show()
