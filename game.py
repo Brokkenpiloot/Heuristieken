@@ -1,8 +1,7 @@
 # Heuristieken.
 # Joost Jason en Joren.
 # RushHour.
-#
-import random
+# 
 
 class Board(object):
     def __init__(self, width, height):
@@ -53,14 +52,9 @@ class Car(object):
             board.addVerticalCar(x, y, carID, self.length)
 
     def isCarFree(self):
-        # Functie heeft nog wat fouten
         if self.orientation is 'horizontal':
-            # dit if-statement moet in ieder geval 'and' worden
             if self.x - 1 < 0 or self.x + self.length >= self.board.width:
                 return False
-            # onderstaand if-statement geeft soms een 'list index out of range'
-            # als het bovenstaande if-statement 'and' gebruikt.
-            # we moeten even onderzoeken hoe dat samenhangt. 
             if self.board.checkIfEmpty(self.x - 1,self.y) or \
             self.board.checkIfEmpty(self.x + self.length,self.y):
                 return True
@@ -79,36 +73,25 @@ class Car(object):
 
 def runSimulationGame1(height, width):
 
-    room = Board(width, height)
+    room = board(width, height)
     # carID = 1
 
-    # addHorizontalCar(orientation, room, x, y, length, carID)
+    # addHorizontalCar(x, y, carID, length)
     # red Car
-    carList = []
-    redCar = Car('horizontal', room, 3, 2, 2, 1)
+    addHorizontalCar(3, 2, 1, 2)
 
     # Traffic
-    traffic1 = Car('vertical', room, 2, 0, 3, 2)
-    traffic2 = Car('horizontal', room, 3, 0, 2, 3)
-    traffic3 = Car('vertical', room, 5, 0, 3, 4)
-    traffic4 = Car('vertical', room, 3, 3, 3, 5)
-    traffic5 = Car('horizontal', room, 4, 3, 2, 6)
-    traffic6 = Car('vertical', room, 0, 4, 2, 7)
-    traffic7 = Car('horizontal', room, 1, 4, 2, 8)
-    traffic8 = Car('horizontal', room, 4, 5, 2, 9)
-    
-    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
-    
+    addVerticalCar(2, 0, 2, 3)
+    addHorizontalCar(3, 0, 3, 2)
+    addVerticalCar(5, 0, 4, 3)
+    addVerticalCar(3, 3, 5, 3)
+    addHorizontalcar(4, 3, 6, 2)
+    addVerticalCar(0, 4, 7, 2)
+    addHorizontalCar(1, 4, 8, 2)
+    addHorizontalCar(5, 4, 9, 2)   
+
     room.show()
-    # Zoekt random Car en kijkt of ie free staat
-    # (kan misschien ook ergens anders als aparte method?)
-    currentCar = (random.choice(carList))
-    print ("This car is free:", currentCar.isCarFree(), ", Car ID", currentCar.carID)
 
-    #TODO: move etc.
-
-    # Tijdelijk weggecomment zodat simulatie 1 gerund kan worden
-    """   
 def runSimulationGame2(height, width):
     room = board(width, height)
 
@@ -151,6 +134,6 @@ def runSimulationGame2(height, width):
     addVerticalCar(2, 4, 12, 2)
     addHorizontalCar(4, 4, 13, 2)
 
-"""
+
     room.show()
 
