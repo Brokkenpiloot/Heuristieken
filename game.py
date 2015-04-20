@@ -10,25 +10,25 @@ class Board(object):
         # Generate empty board as list of lists
         self.height = height
         self.width = width
-        self.board = [["empty" for i in range(width)] for j in range(height)]
+        self.tiles = [["empty" for i in range(width)] for j in range(height)]
     def show(self):
-        for row in self.board:
+        for row in self.tiles:
             print(row)    
     def addVerticalCar(self, x, y, ID, length):
         # TODO: create car object 
         
-        self.board[y][x] = 'Car %d' %(ID)
-        self.board[y+1][x] = 'Car %d' %(ID)
+        self.tiles[y][x] = 'Car %d' %(ID)
+        self.tiles[y+1][x] = 'Car %d' %(ID)
         if length is 3:
-            self.board[y+2][x] = 'Car %d' %(ID)
+            self.tiles[y+2][x] = 'Car %d' %(ID)
         
     def addHorizontalCar(self, x, y, ID, length):
         # TODO: create car object 
         
-        self.board[y][x] = 'Car %d' %(ID)
-        self.board[y][x+1] = 'Car %d' %(ID)
+        self.tiles[y][x] = 'Car %d' %(ID)
+        self.tiles[y][x+1] = 'Car %d' %(ID)
         if length is 3:
-            self.board[y][x+2] = 'Car %d' %(ID)
+            self.tiles[y][x+2] = 'Car %d' %(ID)
 
     def checkIfEmpty(self, x, y):
         if y >= self.height or x >= self.width:
@@ -36,13 +36,13 @@ class Board(object):
         if y < 0 or x < 0:
             return False
         
-        if self.board[y][x] is 'empty':
+        if self.tiles[y][x] is 'empty':
             return True
         else:
             return False
 
     def checkCoordinate(self, x, y):
-        print(self.board[y][x])
+        print(self.tiles[y][x])
 
 class Car(object):
     def __init__(self, orientation, board, x, y, length, carID):
@@ -53,7 +53,7 @@ class Car(object):
         self.y = y
         self.length = length
         self.carID = carID
-        self.free = ''
+        self.free = []
         if orientation is 'horizontal':
             board.addHorizontalCar(x, y, carID, self.length)
         if orientation is 'vertical':
@@ -68,13 +68,13 @@ class Car(object):
             #Positie vrij
             if self.board.checkIfEmpty(self.x - 1,self.y) and \
             self.board.checkIfEmpty(self.x+ self.length,self.y):
-                self.free = 'left, right'
+                self.free.extend(['left', 'right'])
                 return True
             elif self.board.checkIfEmpty(self.x - 1,self.y):
-                self.free = 'left'
+                self.free.append('left')
                 return True
             elif self.board.checkIfEmpty(self.x + self.length,self.y):
-                self.free = 'right'
+                self.free.append('right')
                 return True
             else:
                 return False
@@ -87,20 +87,33 @@ class Car(object):
             # Positie vrij 
             if self.board.checkIfEmpty(self.x,self.y - 1) and \
             self.board.checkIfEmpty(self.x,self.y + self.length):
-                self.free = 'top, bot'
+                self.free.extend(['top', 'bot'])
                 return True
             elif self.board.checkIfEmpty(self.x,self.y - 1):
-                self.free = 'top'
+                self.free.append('top')
                 return True
             elif self.board.checkIfEmpty(self.x,self.y + self.length):
-                self.free = 'bot'
+                self.free.append('bot')
                 return True
             else:
                 return False
-    #def move(self):
-         #if self.free == 'top':
-             #self.board[self.y+1][self.x] = 'Car %d' %(self.carID)
-             #self.board[self.y-1][self.x] = 'empty'
+    def move(self):
+
+         # if self.free[0] == 'top' and self.free[1] == 'bot':
+             # TODO: random choice between top and bot
+         if self.free[0] == 'top':
+             self.board.tiles[self.y-1][self.x] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y+1][self.x] = 'empty'
+         elif self.free[0] == 'bot':
+             self.board.tiles[self.y+self.length][self.x] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y][self.x] = 'empty'
+             # TODO: left and right movement
+             # TODO: Account for car length
+    
+         
+             
+        
+    
 
 
          
@@ -137,7 +150,9 @@ def runSimulationGame1(height, width):
     moveCar = (random.choice(freeCars))
     print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
 
-    # TODO moveCar.move()
+    # TODO
+    moveCar.move()
+    room.show()
 
             
         
@@ -182,4 +197,3 @@ def runSimulationGame2(height, width):
     addVerticalCar(2, 4, 12, 2)
     addHorizontalCar(4, 4, 13, 2)
 """
-    room.show()
