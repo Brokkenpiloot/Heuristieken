@@ -158,14 +158,15 @@ def runSimulationGame1(height, width):
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
+  
 
-    # Uiteindelijke While Loop
+    # Random algoritme, stopt na win of x aantal zetten
     # while redCar.winCoordinates(4, 2) == False:
 
-    
-
-    # Voorlopige loop, maakt 10 random zetten
-    for i in range(10):       
+    # TODO: Cars die niet meer free staan moeten uit de freeCars list
+    # worden gehaald, of de move() functie moet een aparte branch hebben
+    # voor Cars waarbij self.free '' is.
+    for counter in range (500):
         room.show()
         for currentCar in carList:
             if currentCar.isCarFree():
@@ -176,9 +177,8 @@ def runSimulationGame1(height, width):
         
 
         moveCar.move()
-
-    # TODO: auto's moeten weg worden gehaald uit de freeCars list
-    # als ze niet meer free staan, of anders de list elke loop leegmaken
+        print (counter)
+    return counter
     
 
             
