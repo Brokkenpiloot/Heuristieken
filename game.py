@@ -104,24 +104,24 @@ class Car(object):
              self.free = random.choice(['top', 'bot'])
          
         if self.free == 'top':
-             self.board.tiles[self.y-(self.length-1)][self.x] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y-1][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y+(self.length-1)][self.x] = 'empty'
-             self.y = self.y-(self.length-1)
+             self.y = self.y - 1
         elif self.free == 'bot':
              self.board.tiles[self.y+self.length][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
-             self.y = self.y + (self.length - 1)
+             self.y = self.y + 1
              
         if self.free == 'left, right':
              self.free = random.choice(['left', 'right'])
         if self.free == 'left':
-             self.board.tiles[self.y][self.x-(self.length-1)] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y][self.x-1] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x+(self.length-1)] = 'empty'
-             self.x = self.x-(self.length-1)
+             self.x = self.x - 1
         elif self.free == 'right':
              self.board.tiles[self.y][self.x+self.length] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
-             self.x = self.x+ (self.length - 1)
+             self.x = self.x + 1
              
     def winCoordinates(self, x, y):
         if self.board.tiles[self.y][self.x] == self.board.tiles[y][x]:
@@ -163,15 +163,28 @@ def runSimulationGame1(height, width):
     # Random algoritme, stopt na win of x aantal zetten
     # while redCar.winCoordinates(4, 2) == False:
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    
+
+    # Voorlopige loop, maakt 10 random zetten
+    for i in range(50):       
+=======
+>>>>>>> Stashed changes
     # TODO: Cars die niet meer free staan moeten uit de freeCars list
     # worden gehaald, of de move() functie moet een aparte branch hebben
     # voor Cars waarbij self.free '' is.
     for counter in range (500):
+<<<<<<< Updated upstream
+=======
+>>>>>>> ee416696d27c690283d2737974f1f5e296cfa6d5
+>>>>>>> Stashed changes
         room.show()
         for currentCar in carList:
             if currentCar.isCarFree():
-                freeCars.append(currentCar)
-                
+                freeCars.append(currentCar)     
+        
         moveCar = (random.choice(freeCars))
         print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
         
