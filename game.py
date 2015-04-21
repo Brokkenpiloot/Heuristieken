@@ -128,14 +128,7 @@ class Car(object):
             return True
         else:
             return False
-
-    
-    
-            
-
-
          
-
 def runSimulationGame1(height, width):
 
     room = Board(width, height)
@@ -157,21 +150,18 @@ def runSimulationGame1(height, width):
     traffic7 = Car('horizontal', room, 1, 4, 2, 8)
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
     
-    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
-  
+    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8] 
 
     # Random algoritme, stopt na win of x aantal zetten
-    # while redCar.winCoordinates(4, 2) == False:
-
-    # Voorlopige loop, maakt 10 random zetten
-    for i in range(50):       
-        room.show()
-        for currentCar in carList:
-            if currentCar.isCarFree():
-                freeCars.append(currentCar)     
+    while redCar.winCoordinates(5, 2) == False:
+        for i in range(50):       
+            room.show()
+            for currentCar in carList:
+                if currentCar.isCarFree():
+                    freeCars.append(currentCar)     
         
-        moveCar = (random.choice(freeCars))
-        print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
+            moveCar = (random.choice(freeCars))
+            print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
         
 
         moveCar.move()
