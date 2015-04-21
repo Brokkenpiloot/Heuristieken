@@ -5,12 +5,13 @@
 
 import random
 
+
 class Board(object):
     def __init__(self, width, height):
-        # Generate empty board as list of lists
         self.height = height
         self.width = width
         self.tiles = [["empty" for i in range(width)] for j in range(height)]
+        self.storage = set()
     def show(self):
         for row in self.tiles:
             print(row)    
@@ -43,8 +44,15 @@ class Board(object):
         print(self.tiles[y][x])
         
     def convertState(self):
-        self.state == 
+        # List of lists to String conversion
+        state = ''
+        for i in range(self.height):
+            state = state + ''.join(self.tiles[i])
+        return state
 
+    # TODO: Add state to set functie (self.storage.add(state))
+    # Compare states functie (state in self.storage == True/False)
+    # Logica van move functie aanpassen aan de hand van de gestorede states
 
 class Car(object):
     def __init__(self, orientation, board, x, y, length, carID):
@@ -132,12 +140,8 @@ class Car(object):
         else:
             return False
          
-<<<<<<< HEAD
 
 def runSimulationGame1():
-=======
-def runSimulationGame1(height, width):
->>>>>>> origin/master
 
     room = Board(6, 6)
     # carID = 1
@@ -161,37 +165,29 @@ def runSimulationGame1(height, width):
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8] 
 
     # Random algoritme, stopt na win of x aantal zetten
-<<<<<<< HEAD
-    # while redCar.winCoordinates(4, 2) == False:
-
-    # Voorlopige loop, maakt 10 random zetten
-    counter  = 0
-    while redCar.winCoordinates(5,2) == False:      
-        room.show()
-        for currentCar in carList:
-            if currentCar.isCarFree():
-                freeCars.append(currentCar)     
-=======
-    while redCar.winCoordinates(5, 2) == False:
-        for i in range(50):       
+    counter = 0
+    while redCar.winCoordinates(5, 2) == False:       
             room.show()
             for currentCar in carList:
                 if currentCar.isCarFree():
                     freeCars.append(currentCar)     
->>>>>>> origin/master
         
             moveCar = (random.choice(freeCars))
             print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
         
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-        
-        moveCar.move()
-        counter = counter+ 1
-        if counter == 100:
-            break
-        print ("Counter: %i" %counter)
-        
+            # maakt freeCars list weer leeg
+            freeCars[:] = []
+            
+            moveCar.move()
+            # counter om loop eerder te breken
+            counter = counter+ 1
+            print ("Counter: %i" %counter)
+            if counter is 10:
+                break
+
+    # print string state van het board
+    state = room.convertState()
+    print (state)
     return counter
 
 
