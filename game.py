@@ -104,22 +104,22 @@ class Car(object):
              self.free = random.choice(['top', 'bot'])
          
         if self.free == 'top':
-             self.board.tiles[self.y-1][self.x] = 'Car %d' %(self.carID)
-             self.board.tiles[self.y+(self.length-1)][self.x] = 'empty'
+             self.board.tiles[self.y - 1][self.x] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y + (self.length - 1)][self.x] = 'empty'
              self.y = self.y - 1
         elif self.free == 'bot':
-             self.board.tiles[self.y+self.length][self.x] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y + self.length][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
              self.y = self.y + 1
              
         if self.free == 'left, right':
              self.free = random.choice(['left', 'right'])
         if self.free == 'left':
-             self.board.tiles[self.y][self.x-1] = 'Car %d' %(self.carID)
-             self.board.tiles[self.y][self.x+(self.length-1)] = 'empty'
+             self.board.tiles[self.y][self.x - 1] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y][self.x + (self.length - 1)] = 'empty'
              self.x = self.x - 1
         elif self.free == 'right':
-             self.board.tiles[self.y][self.x+self.length] = 'Car %d' %(self.carID)
+             self.board.tiles[self.y][self.x + self.length] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
              self.x = self.x + 1
              
