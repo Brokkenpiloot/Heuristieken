@@ -163,23 +163,8 @@ def runSimulationGame1(height, width):
     # Random algoritme, stopt na win of x aantal zetten
     # while redCar.winCoordinates(4, 2) == False:
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-    
-
     # Voorlopige loop, maakt 10 random zetten
     for i in range(50):       
-=======
->>>>>>> Stashed changes
-    # TODO: Cars die niet meer free staan moeten uit de freeCars list
-    # worden gehaald, of de move() functie moet een aparte branch hebben
-    # voor Cars waarbij self.free '' is.
-    for counter in range (500):
-<<<<<<< Updated upstream
-=======
->>>>>>> ee416696d27c690283d2737974f1f5e296cfa6d5
->>>>>>> Stashed changes
         room.show()
         for currentCar in carList:
             if currentCar.isCarFree():
@@ -190,14 +175,27 @@ def runSimulationGame1(height, width):
         
 
         moveCar.move()
-        print (counter)
-    return counter
-    
 
-            
+    # TODO: auto's moeten weg worden gehaald uit de freeCars list
+    # als ze niet meer free staan, of anders de list elke loop leegmaken 
+
+    # TODO: Cars die niet meer free staan moeten uit de freeCars list
+    # worden gehaald, of de move() functie moet een aparte branch hebben
+    # voor Cars waarbij self.free '' is.
+    # for counter in range (500):
+
+    #     room.show()
+    #     for currentCar in carList:
+    #         if currentCar.isCarFree():
+    #             freeCars.append(currentCar)     
+        
+    #     moveCar = (random.choice(freeCars))
+    #     print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
         
 
-    
+    #     moveCar.move()
+    #     print (counter)
+    # return counter
 
     # Tijdelijk weggecomment zodat simulatie 1 gerund kan worden
     """   
