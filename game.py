@@ -76,6 +76,7 @@ class Car(object):
                 self.free = 'right'
                 return True
             else:
+                self.free = ''
                 return False
             
         if self.orientation is 'vertical':
@@ -95,6 +96,7 @@ class Car(object):
                 self.free = 'bot'
                 return True
             else:
+                self.free = ''
                 return False
     def move(self):
 
@@ -108,7 +110,7 @@ class Car(object):
         elif self.free == 'bot':
              self.board.tiles[self.y+self.length][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
-             self.y = self.y+self.length
+             self.y = self.y + (self.length - 1)
              
         if self.free == 'left, right':
              self.free = random.choice(['left', 'right'])
@@ -119,7 +121,7 @@ class Car(object):
         elif self.free == 'right':
              self.board.tiles[self.y][self.x+self.length] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
-             self.x = self.x+self.length
+             self.x = self.x+ (self.length - 1)
              
     def winCoordinates(self, x, y):
         if self.board.tiles[self.y][self.x] == self.board.tiles[y][x]:
