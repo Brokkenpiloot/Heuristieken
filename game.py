@@ -41,6 +41,9 @@ class Board(object):
 
     def checkCoordinate(self, x, y):
         print(self.tiles[y][x])
+        
+    def convertState(self):
+        self.state == 
 
 
 class Car(object):
@@ -136,9 +139,9 @@ class Car(object):
 
          
 
-def runSimulationGame1(height, width):
+def runSimulationGame1():
 
-    room = Board(width, height)
+    room = Board(6, 6)
     # carID = 1
 
     # addHorizontalCar(orientation, room, x, y, length, carID)
@@ -164,7 +167,8 @@ def runSimulationGame1(height, width):
     # while redCar.winCoordinates(4, 2) == False:
 
     # Voorlopige loop, maakt 10 random zetten
-    for i in range(50):       
+    counter  = 0
+    while redCar.winCoordinates(5,2) == False:      
         room.show()
         for currentCar in carList:
             if currentCar.isCarFree():
@@ -173,31 +177,18 @@ def runSimulationGame1(height, width):
         moveCar = (random.choice(freeCars))
         print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
         
-
+        # maakt freeCars list weer leeg
+        freeCars[:] = []
+        
         moveCar.move()
-
-    # TODO: auto's moeten weg worden gehaald uit de freeCars list
-    # als ze niet meer free staan, of anders de list elke loop leegmaken 
-
-    # TODO: Cars die niet meer free staan moeten uit de freeCars list
-    # worden gehaald, of de move() functie moet een aparte branch hebben
-    # voor Cars waarbij self.free '' is.
-    # for counter in range (500):
-
-    #     room.show()
-    #     for currentCar in carList:
-    #         if currentCar.isCarFree():
-    #             freeCars.append(currentCar)     
+        counter = counter+ 1
+        if counter == 100:
+            break
+        print ("Counter: %i" %counter)
         
-    #     moveCar = (random.choice(freeCars))
-    #     print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
-        
+    return counter
 
-    #     moveCar.move()
-    #     print (counter)
-    # return counter
 
-    # Tijdelijk weggecomment zodat simulatie 1 gerund kan worden
     """   
 def runSimulationGame2(height, width):
     room = board(width, height)
