@@ -186,15 +186,18 @@ def runSimulationGame1():
             freeCars[:] = []
             
             moveCar.move()
+            
+            # Opslaan van huidige boardstate
+            state = room.convertState()
+            room.saveState(state)
+            
             # counter om loop eerder te breken
             counter = counter+ 1
+
+            
             print ("Counter: %i" %counter)
             if counter is 10:
                 break
-
-    # print string state van het board
-    state = room.convertState()
-    print (state)
     return counter
 
 
