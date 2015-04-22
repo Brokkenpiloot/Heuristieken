@@ -49,10 +49,17 @@ class Board(object):
         for i in range(self.height):
             state = state + ''.join(self.tiles[i])
         return state
-
-    # TODO: Add state to set functie (self.storage.add(state))
-    # Compare states functie (state in self.storage == True/False)
-    # Logica van move functie aanpassen aan de hand van de gestorede states
+    
+    def saveState(self, state):
+        # Voegt state string toe aan set
+        self.storage.add(state)
+        
+    def compareState(self, state):
+        # Zoekt of state string bestaat in set, return true indien ja
+        return state in self.storage
+    
+    
+# TODO: Logica van move functie aanpassen aan de hand van de gestorede states
 
 class Car(object):
     def __init__(self, orientation, board, x, y, length, carID):
