@@ -59,7 +59,6 @@ class Board(object):
         return state in self.storage
     
     
-# TODO: Logica van move functie aanpassen aan de hand van de gestorede states
 
 class Car(object):
     def __init__(self, orientation, board, x, y, length, carID):
@@ -85,7 +84,7 @@ class Car(object):
             #Positie vrij
             if self.board.checkIfEmpty(self.x - 1,self.y) and \
             self.board.checkIfEmpty(self.x+ self.length,self.y):
-                self.free = 'left, right'
+                self.free = random.choice(['left', 'right'])
                 return True
             elif self.board.checkIfEmpty(self.x - 1,self.y):
                 self.free = 'left'
@@ -105,7 +104,7 @@ class Car(object):
             # Positie vrij 
             if self.board.checkIfEmpty(self.x,self.y - 1) and \
             self.board.checkIfEmpty(self.x,self.y + self.length):
-                self.free = 'top, bot'
+                self.free = random.choice(['top', 'bot'])
                 return True
             elif self.board.checkIfEmpty(self.x,self.y - 1):
                 self.free = 'top' 
@@ -118,8 +117,6 @@ class Car(object):
                 return False
     def move(self):
 
-        if self.free == 'top, bot':
-             self.free = random.choice(['top', 'bot'])
          
         if self.free == 'top':
              self.board.tiles[self.y - 1][self.x] = 'Car %d' %(self.carID)
@@ -130,8 +127,6 @@ class Car(object):
              self.board.tiles[self.y][self.x] = 'empty'
              self.y = self.y + 1
              
-        if self.free == 'left, right':
-             self.free = random.choice(['left', 'right'])
         if self.free == 'left':
              self.board.tiles[self.y][self.x - 1] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x + (self.length - 1)] = 'empty'
@@ -177,6 +172,8 @@ def runSimulationGame1():
             room.show()
 
             
+
+            
             # Opslaan van huidige boardstate als hij nog niet
             # de storage staat
             state = room.convertState()
@@ -192,12 +189,19 @@ def runSimulationGame1():
             moveCar = (random.choice(freeCars))
             print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
         
-            # maakt freeCars list weer leeg
-            freeCars[:] = []
+            
+            
+            # TODO: Tijdelijke kopie maken van board, move functie op uitvoeren
+            # en compareState doen. Als compareState true returnt dan andere auto
+            # kiezen uit freeCars list en weer proberen. Als compareState false returnt
+            # dan move doen op het oorspronkelijke board. Als geen van de mogelijke moves
+            # naar een nieuwe state leidt dan moet er iets anders gebeuren
+            # (hele boardstate resetten misschien?)
             
             moveCar.move()
-            
 
+            # maakt freeCars list weer leeg
+            freeCars[:] = []
 
             
             # counter om loop eerder te breken
