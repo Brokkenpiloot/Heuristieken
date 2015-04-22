@@ -171,10 +171,20 @@ def runSimulationGame1():
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8] 
 
-    # Random algoritme, stopt na win of x aantal zetten
+    # Algoritme, stopt na win of x aantal zetten
     counter = 0
     while redCar.winCoordinates(5, 2) == False:       
             room.show()
+
+            
+            # Opslaan van huidige boardstate als hij nog niet
+            # de storage staat
+            state = room.convertState()
+            if room.compareState(state) == False:
+                room.saveState(state)
+
+                
+            # Kiest random car uit alle cars die vrijstaan en beweegt hem
             for currentCar in carList:
                 if currentCar.isCarFree():
                     freeCars.append(currentCar)     
@@ -187,17 +197,18 @@ def runSimulationGame1():
             
             moveCar.move()
             
-            # Opslaan van huidige boardstate
-            state = room.convertState()
-            room.saveState(state)
-            
-            # counter om loop eerder te breken
-            counter = counter+ 1
+
 
             
+            # counter om loop eerder te breken
+            counter = counter+ 1            
             print ("Counter: %i" %counter)
-            if counter is 10:
+            if counter is 250:
                 break
+            
+    # toont het aantal unieke states/zetten die zijn gemaakt
+    print ("States stored:")
+    print (len(room.storage))
     return counter
 
 
