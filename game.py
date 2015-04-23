@@ -145,10 +145,13 @@ class Car(object):
         else:
             return False
 <<<<<<< HEAD
+<<<<<<< HEAD
         
     def showFree(self):
         tempfree = self.free
         return tempfree
+=======
+>>>>>>> parent of 7d92a42... Werkend algoritme (maybe)
 =======
 >>>>>>> parent of 7d92a42... Werkend algoritme (maybe)
          
