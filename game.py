@@ -144,13 +144,12 @@ class Car(object):
             return True
         else:
             return False
-
-<<<<<<< HEAD
+        
     def showFree(self):
         tempfree = self.free
         return tempfree
          
-=======
+
 def reverseLastMove(movelist):
 
         carToReverse = movelist[-2]
@@ -164,7 +163,7 @@ def reverseLastMove(movelist):
         elif moveToReverse == 'bot':
             carToReverse.free = 'top'
         carToReverse.move()
->>>>>>> origin/master
+
 
 def runSimulationGame1():
 
@@ -225,7 +224,6 @@ def runSimulationGame1():
             freeString = moveCar.showFree()
             tempCar.free = freeString
             tempCar.move()
-            tempBoard.show()
             lookAhead = tempBoard.convertState()
             if room.compareState(lookAhead) == False:
                 moveCar.move()
