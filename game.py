@@ -172,8 +172,7 @@ def runSimulationGame1():
             room.show()
 
             
-
-            
+                       
             # Opslaan van huidige boardstate als hij nog niet
             # de storage staat
             state = room.convertState()
@@ -197,17 +196,34 @@ def runSimulationGame1():
             # dan move doen op het oorspronkelijke board. Als geen van de mogelijke moves
             # naar een nieuwe state leidt dan moet er iets anders gebeuren
             # (hele boardstate resetten misschien?)
-            
+            """
+            tempBoard = room
+            tempCar = Car(moveCar.orientation, tempBoard, moveCar.x, moveCar.y, moveCar.length, moveCar.carID)
+            tempCar.free = moveCar.free
+            tempCar.move()
+            lookAhead = tempBoard.convertState()
+            if room.compareState(lookAhead) == False:
+                moveCar.move()
+
+                counter = counter+ 1            
+                print ("Counter: %i" %counter)
+
+            """
+
             moveCar.move()
+            counter = counter + 1
+            print ("Counter: %i" %counter)
+                
+                
 
             # maakt freeCars list weer leeg
             freeCars[:] = []
 
+
+
             
             # counter om loop eerder te breken
-            counter = counter+ 1            
-            print ("Counter: %i" %counter)
-            if counter is 250:
+            if counter is 20:
                 break
             
     # toont het aantal unieke states/zetten die zijn gemaakt
