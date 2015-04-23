@@ -72,7 +72,7 @@ class Car(object):
         self.y = y
         self.length = length
         self.carID = carID
-        self.free = ''
+        self.free = []
         if orientation is 'horizontal':
             board.addHorizontalCar(x, y, carID, self.length)
         if orientation is 'vertical':
@@ -144,10 +144,13 @@ class Car(object):
             return True
         else:
             return False
+<<<<<<< HEAD
         
     def showFree(self):
         tempfree = self.free
         return tempfree
+=======
+>>>>>>> parent of 7d92a42... Werkend algoritme (maybe)
          
 
 def reverseLastMove(movelist):
@@ -218,11 +221,10 @@ def runSimulationGame1():
             # dan move doen op het oorspronkelijke board. Als geen van de mogelijke moves
             # naar een nieuwe state leidt dan moet er iets anders gebeuren
             # (hele boardstate resetten misschien?)
-            
+            """
             tempBoard = room
             tempCar = Car(moveCar.orientation, tempBoard, moveCar.x, moveCar.y, moveCar.length, moveCar.carID)
-            freeString = moveCar.showFree()
-            tempCar.free = freeString
+            tempCar.free = moveCar.free
             tempCar.move()
             lookAhead = tempBoard.convertState()
             if room.compareState(lookAhead) == False:
@@ -230,7 +232,12 @@ def runSimulationGame1():
 
                 counter = counter+ 1            
                 print ("Counter: %i" %counter)
-                        
+            """
+            
+            moveCar.move()
+
+            counter = counter+ 1            
+            print ("Counter: %i" %counter)  
                 
 
             # maakt freeCars list weer leeg
