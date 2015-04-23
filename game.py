@@ -144,17 +144,10 @@ class Car(object):
             return True
         else:
             return False
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
     def showFree(self):
-        tempfree = self.free
-        return tempfree
-=======
->>>>>>> parent of 7d92a42... Werkend algoritme (maybe)
-=======
->>>>>>> parent of 7d92a42... Werkend algoritme (maybe)
-         
+        tempFree = self.free
+        return tempFree
+
 
 def reverseLastMove(movelist):
 
@@ -171,6 +164,9 @@ def reverseLastMove(movelist):
         carToReverse.move()
 
 
+
+         
+
 def runSimulationGame1():
 
     room = Board(6, 6)
@@ -180,6 +176,7 @@ def runSimulationGame1():
     # red Car
     carList = []
     freeCars = []
+    moveList = []
     redCar = Car('horizontal', room, 3, 2, 2, 1)
 
     # Traffic
@@ -215,12 +212,8 @@ def runSimulationGame1():
         
             moveCar = (random.choice(freeCars))
             print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
-<<<<<<< HEAD
-            moveList.append((moveCar, moveCar.free))            
-=======
-        
+            moveList.append((moveCar.carID, moveCar.free))
             
->>>>>>> parent of d458707... moveList
             
             # TODO: Tijdelijke kopie maken van board, move functie op uitvoeren
             # en compareState doen. Als compareState true returnt dan andere auto
@@ -230,7 +223,8 @@ def runSimulationGame1():
             # (hele boardstate resetten misschien?)
             tempBoard = room
             tempCar = Car(moveCar.orientation, tempBoard, moveCar.x, moveCar.y, moveCar.length, moveCar.carID)
-            tempCar.free = moveCar.free
+            tempString = moveCar.showFree()
+            tempCar.free = tempString
             tempCar.move()
             lookAhead = tempBoard.convertState()
             if room.compareState(lookAhead) == False:
@@ -252,6 +246,7 @@ def runSimulationGame1():
                 break
             
     # toont het aantal unieke states/zetten die zijn gemaakt
+    print (moveList)
     print ("States stored:")
     print (len(room.storage))
     return counter
