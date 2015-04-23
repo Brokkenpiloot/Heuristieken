@@ -145,10 +145,26 @@ class Car(object):
         else:
             return False
 
+<<<<<<< HEAD
     def showFree(self):
         tempfree = self.free
         return tempfree
          
+=======
+def reverseLastMove(movelist):
+
+        carToReverse = movelist[-2]
+        moveToReverse = movelist[-1]
+        if moveToReverse == 'left':
+            carToReverse.free = 'right'
+        elif moveToReverse == 'right':
+            carToReverse.free = 'left'
+        elif moveToReverse == 'top':
+            carToReverse.free = 'bot'
+        elif moveToReverse == 'bot':
+            carToReverse.free = 'top'
+        carToReverse.move()
+>>>>>>> origin/master
 
 def runSimulationGame1():
 
@@ -195,7 +211,7 @@ def runSimulationGame1():
         
             moveCar = (random.choice(freeCars))
             print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
-            moveList.append((moveCar.carID, moveCar.free))            
+            moveList.append((moveCar, moveCar.free))            
             
             # TODO: Tijdelijke kopie maken van board, move functie op uitvoeren
             # en compareState doen. Als compareState true returnt dan andere auto
