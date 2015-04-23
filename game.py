@@ -155,6 +155,7 @@ def runSimulationGame1():
     # red Car
     carList = []
     freeCars = []
+    moveList = []
     redCar = Car('horizontal', room, 3, 2, 2, 1)
 
     # Traffic
@@ -190,8 +191,7 @@ def runSimulationGame1():
         
             moveCar = (random.choice(freeCars))
             print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
-        
-            
+            moveList.append((moveCar.carID, moveCar.free))            
             
             # TODO: Tijdelijke kopie maken van board, move functie op uitvoeren
             # en compareState doen. Als compareState true returnt dan andere auto
@@ -199,6 +199,7 @@ def runSimulationGame1():
             # dan move doen op het oorspronkelijke board. Als geen van de mogelijke moves
             # naar een nieuwe state leidt dan moet er iets anders gebeuren
             # (hele boardstate resetten misschien?)
+            """
             tempBoard = room
             tempCar = Car(moveCar.orientation, tempBoard, moveCar.x, moveCar.y, moveCar.length, moveCar.carID)
             tempCar.free = moveCar.free
@@ -209,20 +210,25 @@ def runSimulationGame1():
 
                 counter = counter+ 1            
                 print ("Counter: %i" %counter)
-              
+            """
+            
+            moveCar.move()
+
+            counter = counter+ 1            
+            print ("Counter: %i" %counter)  
                 
 
             # maakt freeCars list weer leeg
             freeCars[:] = []
-
-
 
             
             # counter om loop eerder te breken
             if counter is 20:
                 break
             
-    # toont het aantal unieke states/zetten die zijn gemaakt
+    # toont het aantal unieke states/zetten die zijn gemaakt en
+    # de moves die zijn gemaakt
+    print (moveList)
     print ("States stored:")
     print (len(room.storage))
     return counter
