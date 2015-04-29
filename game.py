@@ -73,6 +73,8 @@ class Car(object):
         self.length = length
         self.carID = carID
         self.free = []
+        self.bothSides = False
+        self.moved = False
         if orientation is 'horizontal':
             board.addHorizontalCar(x, y, carID, self.length)
         if orientation is 'vertical':
@@ -88,15 +90,19 @@ class Car(object):
             if self.board.checkIfEmpty(self.x - 1,self.y) and \
             self.board.checkIfEmpty(self.x+ self.length,self.y):
                 self.free = random.choice(['left', 'right'])
+                self.bothSides = True
                 return True
             elif self.board.checkIfEmpty(self.x - 1,self.y):
                 self.free = 'left'
+                self.bothSides = False
                 return True
             elif self.board.checkIfEmpty(self.x + self.length,self.y):
                 self.free = 'right'
+                self.bothSides = False
                 return True
             else:
                 self.free = ''
+                self.bothSides = False
                 return False
             
         if self.orientation is 'vertical':
@@ -144,15 +150,11 @@ class Car(object):
             return True
         else:
             return False
-    def showFree(self):
-        tempFree = self.free
-        return tempFree
 
+def reverseLastMove(moveList):
 
-def reverseLastMove(movelist):
-
-        carToReverse = movelist[-2]
-        moveToReverse = movelist[-1]
+        carToReverse = moveList.pop()
+        moveToReverse = carToReverse.free
         if moveToReverse == 'left':
             carToReverse.free = 'right'
         elif moveToReverse == 'right':
@@ -162,10 +164,7 @@ def reverseLastMove(movelist):
         elif moveToReverse == 'bot':
             carToReverse.free = 'top'
         carToReverse.move()
-
-
-
-         
+        print ('Car reversed')
 
 def runSimulationGame1():
 
@@ -193,8 +192,10 @@ def runSimulationGame1():
 
     # Algoritme, stopt na win of x aantal zetten
     counter = 0
+    stuckCounter = 0
     while redCar.winCoordinates(5, 2) == False:       
             room.show()
+            
 
             
                        
@@ -203,52 +204,49 @@ def runSimulationGame1():
             state = room.convertState()
             if room.compareState(state) == False:
                 room.saveState(state)
+                stuckCounter = 0
+                print ('New state found')
+            else:
+                reverseLastMove(moveList)
+                room.show()
+                moveCar.moved = True
+                stuckCounter = stuckCounter + 1
+                print ('No new state found: ', stuckCounter)
+
+            if stuckCounter > 30:
+                reverseLastMove(moveList)
+                print ('I was stuck! :(')
 
                 
             # Kiest random car uit alle cars die vrijstaan en beweegt hem
             for currentCar in carList:
-                if currentCar.isCarFree():
+                if currentCar.isCarFree() and currentCar.moved == False:
                     freeCars.append(currentCar)     
         
             moveCar = (random.choice(freeCars))
             print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
-            moveList.append((moveCar.carID, moveCar.free))
+            moveList.append((moveCar))            
             
             
-            # TODO: Tijdelijke kopie maken van board, move functie op uitvoeren
-            # en compareState doen. Als compareState true returnt dan andere auto
-            # kiezen uit freeCars list en weer proberen. Als compareState false returnt
-            # dan move doen op het oorspronkelijke board. Als geen van de mogelijke moves
-            # naar een nieuwe state leidt dan moet er iets anders gebeuren
-            # (hele boardstate resetten misschien?)
-            tempBoard = room
-            tempCar = Car(moveCar.orientation, tempBoard, moveCar.x, moveCar.y, moveCar.length, moveCar.carID)
-            tempString = moveCar.showFree()
-            tempCar.free = tempString
-            tempCar.move()
-            lookAhead = tempBoard.convertState()
-            if room.compareState(lookAhead) == False:
-                moveCar.move()
+            moveCar.move()
 
-                counter = counter+ 1            
-                print ("Counter: %i" %counter)
-              
+            counter = counter + 1            
+            print ("Counter: %i" %counter)  
                 
 
             # maakt freeCars list weer leeg
             freeCars[:] = []
 
-
-
             
             # counter om loop eerder te breken
-            if counter is 20:
-                break
+            #if counter is 20:
+                #break
             
-    # toont het aantal unieke states/zetten die zijn gemaakt
-    print (moveList)
+    # toont het aantal unieke states/zetten die zijn gemaakt en
+    # de moves die zijn gemaakt
     print ("States stored:")
     print (len(room.storage))
+    room.show()
     return counter
 
 
