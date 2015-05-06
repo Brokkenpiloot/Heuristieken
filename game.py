@@ -67,6 +67,7 @@ class Car(object):
         self.carID = carID
         self.free = []
         self.moved = False
+        self.lastMove = ''
         if orientation is 'horizontal':
             board.addHorizontalCar(x, y, carID, self.length)
         if orientation is 'vertical':
@@ -84,10 +85,10 @@ class Car(object):
                 self.free = ['left', 'right']
                 return True
             elif self.board.checkIfEmpty(self.x - 1,self.y):
-                self.free = 'left'
+                self.free = ['left']
                 return True
             elif self.board.checkIfEmpty(self.x + self.length,self.y):
-                self.free = 'right'
+                self.free = ['right']
                 return True
             else:
                 self.free = ''
@@ -104,10 +105,10 @@ class Car(object):
                 self.free = ['top', 'bot']
                 return True
             elif self.board.checkIfEmpty(self.x,self.y - 1):
-                self.free = 'top' 
+                self.free = ['top'] 
                 return True
             elif self.board.checkIfEmpty(self.x,self.y + self.length):
-                self.free = 'bot'
+                self.free = ['bot']
                 return True
             else:
                 self.free = ''
@@ -141,11 +142,9 @@ class Car(object):
         else:
             return False
 
-def reverseLastMove(moveList):
+def reverseLastMove(carToReverse):
 
-        carToReverse = moveList.pop()
-
-        moveToReverse = carToReverse.free
+        moveToReverse = carToReverse.lastMove
         if moveToReverse == 'left':
             carToReverse.free = 'right'
         elif moveToReverse == 'right':
@@ -154,7 +153,7 @@ def reverseLastMove(moveList):
             carToReverse.free = 'bot'
         elif moveToReverse == 'bot':
             carToReverse.free = 'top'
-        carToReverse.move()
+        carToReverse.move(carToReverse.free)
         print ('Car reversed')
 
 def runSimulationGame1():
@@ -184,7 +183,6 @@ def runSimulationGame1():
     # Algoritme, stopt na win of x aantal zetten
     ## Drie nieuwe variabelen toegevoegd die helpen het niveau bij te houden.
     counter = 0
-    stuckCounter = 0
     level = 0
     movesPerLevel = {}
     direction = ''
@@ -198,40 +196,31 @@ def runSimulationGame1():
             state = room.convertState()
             if room.compareState(state) == False:
                 room.saveState(state)
-                stuckCounter = 0
                 for i in freeCars: 
                 	i.moved = False
                 print ('New state found')
             else:
-                reverseLastMove(moveList)
+                reverseLastMove(moveList[-1][0])
                 room.show()
                 moveCar.moved = True
-                movesPerLevel[level].clear()
+                movesPerLevel[level] = []
                 level = level - 1
-                stuckCounter = stuckCounter + 1
-                print ('No new state found: ', stuckCounter)
-
-            ## Deze zouden we uiteindelijk niet meer nodig hebben, maar ik laat hem nu nog
-            ## even staan.
-            if stuckCounter > 30:
-                reverseLastMove(moveList)
-                movesPerLevel[level].clear()
-                level = level - 1
-                print ('I was stuck! :(')           	
+                print ('No new state found: ')     	
 
 
             # Kiest random car uit alle cars die vrijstaan en beweegt hem
             ## Als je op een niveau komt waar al een keer alle moves voor zijn gevonden,
             ## hoef je het niet nog een keer te checken.
-            if movesPerLevel[level] == empty:
+            movesPerLevel[level] = movesPerLevel.get(level, [])
+            if len(movesPerLevel[level]) == 0:
                 for currentCar in carList:
                     if currentCar.isCarFree(): 
-                            if (currentCar.moved == True and currentCar.bothSides == True) \
-                               or (currentCar.moved == False and currentCar.bothSides == False):
-                        freeCars.append(currentCar)
-                for currentCar in freeCars:
-                    movesPerLevel[level].a(currentCar + currentCar.free)
-
+                        for direction in currentCar.free:
+                            freeCars.append(currentCar)
+                            movesPerLevel[level].append(currentCar)
+                            movesPerLevel[level].append(direction)
+                    
+            print ('moves to be made this round"', movesPerLevel[level])
             ## Hier moet ie dus de eerste auto uit movesPerLevel pakken.
             ## Wat ik probeer te fixxen is dat dat dan de eerste waarde in de list zou zijn.
             ## Dictionaries zijn alleen het foute data type... Weet even niet welke ik wel
@@ -244,12 +233,15 @@ def runSimulationGame1():
 
             ## Hier zou dan de tweede waarde de move zijn die hij moet uitvoeren.
             moveCar.move(movesPerLevel[level][1])
-            level = level + 1
-            counter = counter + 1
+            moveCar.lastMove = movesPerLevel[level][1]
+            
             ## Hier zou hij dan de zet die net gedaan is deleten uit de lijst. 
-            movesPerLevel[level].delete[0:1]
+            movesPerLevel[level].pop(0)
+            movesPerLevel[level].pop(0)
             print ("Counter: %i" %counter)      
 
+            level = level + 1
+            counter = counter + 1
             # maakt freeCars list weer leeg
             freeCars[:] = []
 
