@@ -145,14 +145,14 @@ class Car(object):
 def reverseLastMove(carToReverse):
 
         moveToReverse = carToReverse.lastMove
-        if moveToReverse == 'left':
-            carToReverse.free = 'right'
-        elif moveToReverse == 'right':
-            carToReverse.free = 'left'
-        elif moveToReverse == 'top':
-            carToReverse.free = 'bot'
-        elif moveToReverse == 'bot':
-            carToReverse.free = 'top'
+        if moveToReverse == ['left']:
+            carToReverse.free = ['right']
+        elif moveToReverse == ['right']:
+            carToReverse.free = ['left']
+        elif moveToReverse == ['top']:
+            carToReverse.free = ['bot']
+        elif moveToReverse == ['bot']:
+            carToReverse.free = ['top']
         carToReverse.move(carToReverse.free)
         print ('Car reversed')
 
@@ -194,33 +194,36 @@ def runSimulationGame1():
             ## Reverse move maakt ook level eentje kleiner, en cleart de movesPerLevel
             ## van het niveau dat achter gelaten wordt.
             state = room.convertState()
+            movesPerLevel[level] = movesPerLevel.get(level, [])
             if room.compareState(state) == False:
                 room.saveState(state)
                 for i in freeCars: 
                 	i.moved = False
                 print ('New state found')
             else:
-                reverseLastMove(moveList[-1][0])
-                room.show()
-                moveCar.moved = True
-                movesPerLevel[level] = []
-                level = level - 1
-                print ('No new state found: ')     	
+                print ('No new state found: ')
+                while len(movesPerLevel[level]) == 0:
+                    reverseLastMove(moveList[-1][0])
+                    moveList.pop(-1)
+                    room.show()
+                    moveCar.moved = True
+                    movesPerLevel[level] = []
+                    level = level - 1     	
 
 
             # Kiest random car uit alle cars die vrijstaan en beweegt hem
             ## Als je op een niveau komt waar al een keer alle moves voor zijn gevonden,
             ## hoef je het niet nog een keer te checken.
-            movesPerLevel[level] = movesPerLevel.get(level, [])
+            
             if len(movesPerLevel[level]) == 0:
                 for currentCar in carList:
-                    if currentCar.isCarFree(): 
+                    if currentCar.isCarFree():
+                        freeCars.append(currentCar)
                         for direction in currentCar.free:
-                            freeCars.append(currentCar)
                             movesPerLevel[level].append(currentCar)
                             movesPerLevel[level].append(direction)
-                    
-            print ('moves to be made this round"', movesPerLevel[level])
+            print ('Moves to be made this round:', movesPerLevel[level])
+            
             ## Hier moet ie dus de eerste auto uit movesPerLevel pakken.
             ## Wat ik probeer te fixxen is dat dat dan de eerste waarde in de list zou zijn.
             ## Dictionaries zijn alleen het foute data type... Weet even niet welke ik wel
@@ -228,7 +231,8 @@ def runSimulationGame1():
             ## Daarbij moet moveList nu, doordat we niet meer alleen op self.free af gaan,
             ## de auto, maar ook de direction op slaan.
             moveCar = (movesPerLevel[level][0])   
-            print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, "It can move to position:", moveCar.free)
+            print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, \
+                   "It can move to position(s):", moveCar.free)
             moveList.append((moveCar, movesPerLevel[level][1]))
 
             ## Hier zou dan de tweede waarde de move zijn die hij moet uitvoeren.
@@ -237,11 +241,14 @@ def runSimulationGame1():
             
             ## Hier zou hij dan de zet die net gedaan is deleten uit de lijst. 
             movesPerLevel[level].pop(0)
-            movesPerLevel[level].pop(0)
-            print ("Counter: %i" %counter)      
+            movesPerLevel[level].pop(0)    
 
+            # Update counters en print info
             level = level + 1
             counter = counter + 1
+            print ("Counter: %i" %counter)
+            print ("Level: %i" %level)
+            
             # maakt freeCars list weer leeg
             freeCars[:] = []
 
