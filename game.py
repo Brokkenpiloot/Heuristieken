@@ -118,24 +118,24 @@ class Car(object):
             ## van self.free
     def move(self, direction):
 
-        if direction == ['top']:
+        if direction == 'top':
              self.board.tiles[self.y - 1][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y + (self.length - 1)][self.x] = 'empty'
              self.y = self.y - 1
-        elif direction == ['bot']:
+        elif direction == 'bot':
              self.board.tiles[self.y + self.length][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
              self.y = self.y + 1
              
-        if direction == ['left']:
+        if direction == 'left':
              self.board.tiles[self.y][self.x - 1] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x + (self.length - 1)] = 'empty'
              self.x = self.x - 1
-        elif direction == ['right']:
+        elif direction == 'right':
              self.board.tiles[self.y][self.x + self.length] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
              self.x = self.x + 1
-             
+
     def winCoordinates(self, x, y):
         if self.board.tiles[self.y][self.x] == self.board.tiles[y][x]:
             return True
@@ -143,18 +143,19 @@ class Car(object):
             return False
 
 def reverseLastMove(carToReverse):
-
+        tussen = []
         moveToReverse = carToReverse.lastMove
         if moveToReverse == ['left']:
-            carToReverse.free = ['right']
+            tussen = ['right']
         elif moveToReverse == ['right']:
-            carToReverse.free = ['left']
+            tussen = ['left']
         elif moveToReverse == ['top']:
-            carToReverse.free = ['bot']
+            tussen = ['bot']
         elif moveToReverse == ['bot']:
-            carToReverse.free = ['top']
-        carToReverse.move(carToReverse.free)
+            tussen = ['top']
+        carToReverse.move("%s" %tussen)
         print ('Car reversed')
+        print ("reverse show")
 
 def runSimulationGame1():
 
@@ -186,73 +187,99 @@ def runSimulationGame1():
     level = 0
     movesPerLevel = {}
     direction = ''
-    while redCar.winCoordinates(5, 2) == False:       
-            #room.show()
+    # while redCar.winCoordinates(5, 2) == False:
+    for i in range (0, 4):
+        room.show()
                        
-            # Opslaan van huidige boardstate als hij nog niet in
-            # de storage staat
-            ## Reverse move maakt ook level eentje kleiner, en cleart de movesPerLevel
-            ## van het niveau dat achter gelaten wordt.
-            state = room.convertState()
-            movesPerLevel[level] = movesPerLevel.get(level, [])
-            if room.compareState(state) == False:
-                room.saveState(state)
-                for i in freeCars: 
-                	i.moved = False
-                print ('New state found')
-            else:
-                print ('No new state found: ')
-                while len(movesPerLevel[level]) == 0:
-                    reverseLastMove(moveList[-1][0])
-                    moveList.pop(-1)
-                    #room.show()
-                    moveCar.moved = True
-                    movesPerLevel[level] = []
-                    level = level - 1     	
-
+        # Opslaan van huidige boardstate als hij nog niet in
+        # de storage staat
+        ## Reverse move maakt ook level eentje kleiner, en cleart de movesPerLevel
+        ## van het niveau dat achter gelaten wordt.
+        state = room.convertState()
+        movesPerLevel[level] = movesPerLevel.get(level, [])
+        if room.compareState(state) == False:
+            room.saveState(state)
+            for i in freeCars: 
+                i.moved = False
+            print ('New state found')
+        else:
+            print ('No new state found: ')
+            if len(movesPerLevel[level - 1]) == 0:
+                reverseLastMove(moveList[-1][0])
+                moveList.pop(-1)
+                #room.show()
+                moveCar.moved = True
+                movesPerLevel[level] = []
+                level = level - 2
+            else: 
+                reverseLastMove(moveList[-1][0])
+                moveCar.moved = True
+                movesPerLevel[level] = []
+                level = level - 1       	
+            room.show()
+            print
+            print
+            print
 
             # Kiest random car uit alle cars die vrijstaan en beweegt hem
             ## Als je op een niveau komt waar al een keer alle moves voor zijn gevonden,
             ## hoef je het niet nog een keer te checken.
             
-            if len(movesPerLevel[level]) == 0:
-                for currentCar in carList:
-                    if currentCar.isCarFree():
-                        freeCars.append(currentCar)
-                        for direction in currentCar.free:
-                            movesPerLevel[level].append(currentCar)
-                            movesPerLevel[level].append(direction)
-            #print ('Moves to be made this round:', movesPerLevel[level])
+        if len(movesPerLevel[level]) == 0:
+            print ("moves per level leeg")
+            for currentCar in carList:
+                if currentCar.isCarFree():
+                    freeCars.append(currentCar)
+                    for direction in currentCar.free:
+                        movesPerLevel[level].append(currentCar)
+                        movesPerLevel[level].append(direction)
+
+        print (movesPerLevel[level])
+        #print ('Moves to be made this round:', movesPerLevel[level])
             
-            ## Hier moet ie dus de eerste auto uit movesPerLevel pakken.
-            ## Wat ik probeer te fixxen is dat dat dan de eerste waarde in de list zou zijn.
-            ## Dictionaries zijn alleen het foute data type... Weet even niet welke ik wel
-            ## moet hebben.
-            ## Daarbij moet moveList nu, doordat we niet meer alleen op self.free af gaan,
-            ## de auto, maar ook de direction op slaan.
-            moveCar = (movesPerLevel[level][0])   
-            print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, \
+        ## Hier moet ie dus de eerste auto uit movesPerLevel pakken.
+        ## Wat ik probeer te fixxen is dat dat dan de eerste waarde in de list zou zijn.
+        ## Dictionaries zijn alleen het foute data type... Weet even niet welke ik wel
+        ## moet hebben.
+        ## Daarbij moet moveList nu, doordat we niet meer alleen op self.free af gaan,
+        ## de auto, maar ook de direction op slaan.
+        moveCar = (movesPerLevel[level][0])
+        print moveCar   
+        print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, \
                    "It can move to position(s):", moveCar.free)
-            moveList.append((moveCar, movesPerLevel[level][1]))
+        moveList.append((moveCar, movesPerLevel[level][1]))
 
-            ## Hier zou dan de tweede waarde de move zijn die hij moet uitvoeren.
-            moveCar.move(movesPerLevel[level][1])
-            moveCar.lastMove = movesPerLevel[level][1]
-            
-            ## Hier zou hij dan de zet die net gedaan is deleten uit de lijst. 
-            movesPerLevel[level].pop(0)
-            movesPerLevel[level].pop(0)    
+        ## Hier zou dan de tweede waarde de move zijn die hij moet uitvoeren.
+        # print movesPerLevel[level][1]
+        moveCar.move("%s" %movesPerLevel[level][1])
+        # print
+        # print
+        # print
+        # print ("Move Happened")
+        # room.show()
 
-            # Update counters en print info
-            level = level + 1
-            counter = counter + 1
-            print ("Counter: %i" %counter)
-            print ("Level: %i" %level)
-            
-            # maakt freeCars list weer leeg
-            freeCars[:] = []
 
+        moveCar.lastMove = movesPerLevel[level][1]
             
+        ## Hier zou hij dan de zet die net gedaan is deleten uit de lijst. 
+        movesPerLevel[level].pop(0)
+        movesPerLevel[level].pop(0)    
+
+        # Update counters en print info
+        level = level + 1
+        counter = counter + 1
+        print ("Counter: %i" %counter)
+        print ("Level: %i" %level)
+            
+        # maakt freeCars list weer leeg
+        freeCars[:] = []
+
+        # print ("move show")
+        # print 
+        # print 
+        # room.show()
+        # print 
+        # print
             # counter om loop eerder te breken
             #if counter is 20:
                 #break
