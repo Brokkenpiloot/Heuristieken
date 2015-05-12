@@ -118,20 +118,20 @@ class Car(object):
             ## van self.free
     def move(self, direction):
 
-        if direction == 'top':
+        if direction == ['top']:
              self.board.tiles[self.y - 1][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y + (self.length - 1)][self.x] = 'empty'
              self.y = self.y - 1
-        elif direction == 'bot':
+        elif direction == ['bot']:
              self.board.tiles[self.y + self.length][self.x] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
              self.y = self.y + 1
              
-        if direction == 'left':
+        if direction == ['left']:
              self.board.tiles[self.y][self.x - 1] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x + (self.length - 1)] = 'empty'
              self.x = self.x - 1
-        elif direction == 'right':
+        elif direction == ['right']:
              self.board.tiles[self.y][self.x + self.length] = 'Car %d' %(self.carID)
              self.board.tiles[self.y][self.x] = 'empty'
              self.x = self.x + 1
@@ -187,7 +187,7 @@ def runSimulationGame1():
     movesPerLevel = {}
     direction = ''
     while redCar.winCoordinates(5, 2) == False:       
-            room.show()
+            #room.show()
                        
             # Opslaan van huidige boardstate als hij nog niet in
             # de storage staat
@@ -205,7 +205,7 @@ def runSimulationGame1():
                 while len(movesPerLevel[level]) == 0:
                     reverseLastMove(moveList[-1][0])
                     moveList.pop(-1)
-                    room.show()
+                    #room.show()
                     moveCar.moved = True
                     movesPerLevel[level] = []
                     level = level - 1     	
@@ -222,7 +222,7 @@ def runSimulationGame1():
                         for direction in currentCar.free:
                             movesPerLevel[level].append(currentCar)
                             movesPerLevel[level].append(direction)
-            print ('Moves to be made this round:', movesPerLevel[level])
+            #print ('Moves to be made this round:', movesPerLevel[level])
             
             ## Hier moet ie dus de eerste auto uit movesPerLevel pakken.
             ## Wat ik probeer te fixxen is dat dat dan de eerste waarde in de list zou zijn.
