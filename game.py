@@ -223,7 +223,7 @@ def runSimulationGame1():
 
             # Kiest random car uit alle cars die vrijstaan en beweegt hem
             ## Als je op een niveau komt waar al een keer alle moves voor zijn gevonden,
-            ## hoef je het niet nog een keer te checken.
+            ## hoef je het niet nog een keer te checken. 
             
         if len(movesPerLevel[level]) == 0:
             print ("moves per level leeg")
