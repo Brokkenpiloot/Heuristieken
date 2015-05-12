@@ -232,11 +232,14 @@ def runSimulationGame1():
                     freeCars.append(currentCar)
                     for direction in currentCar.free:
                         movesPerLevel[level].append(currentCar)
+                        movesPerLevel[level].append(direction)
 
                         
         # iterate door alle car objects in movesPerLevel en update self.free waarden automatisch
         for i in movesPerLevel[level][::2]:
-            i.isCarFree()
+            if i.isCarFree() == False:
+                movesPerLevel[level].pop(i)
+                movesPerLevel[level].pop(i)
                         
 
         print (movesPerLevel[level])
