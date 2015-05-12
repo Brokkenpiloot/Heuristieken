@@ -232,7 +232,12 @@ def runSimulationGame1():
                     freeCars.append(currentCar)
                     for direction in currentCar.free:
                         movesPerLevel[level].append(currentCar)
-                        movesPerLevel[level].append(direction)
+
+                        
+        # iterate door alle car objects in movesPerLevel en update self.free waarden automatisch
+        for i in movesPerLevel[level][::2]:
+            i.isCarFree()
+                        
 
         print (movesPerLevel[level])
         #print ('Moves to be made this round:', movesPerLevel[level])
@@ -244,7 +249,7 @@ def runSimulationGame1():
         ## Daarbij moet moveList nu, doordat we niet meer alleen op self.free af gaan,
         ## de auto, maar ook de direction op slaan.
         moveCar = (movesPerLevel[level][0])
-        print moveCar   
+        print (moveCar)   
         print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, \
                    "It can move to position(s):", moveCar.free)
         moveList.append((moveCar, movesPerLevel[level][1]))
