@@ -65,9 +65,10 @@ class Car(object):
         self.y = y
         self.length = length
         self.carID = carID
-        self.free = []
-        self.moved = False
-        self.lastMove = ''
+
+        # self.free = []
+        # self.moved = False
+        # self.lastMove = '' 
         if orientation is 'horizontal':
             board.addHorizontalCar(x, y, carID, self.length)
         if orientation is 'vertical':
@@ -77,45 +78,41 @@ class Car(object):
         if self.orientation is 'horizontal':
             # werkt 
             if self.x - 1 < 0 and self.x + self.length >= self.board.width:
-                return False
+                return ['']
 
             #Positie vrij
             if self.board.checkIfEmpty(self.x - 1,self.y) and \
             self.board.checkIfEmpty(self.x+ self.length,self.y):
-                self.free = ['left', 'right']
-                return True
+                return ['left', 'right']
+
             elif self.board.checkIfEmpty(self.x - 1,self.y):
-                self.free = ['left']
-                return True
+                return  ['left']
+
             elif self.board.checkIfEmpty(self.x + self.length,self.y):
-                self.free = ['right']
-                return True
+                return ['right']
             else:
-                self.free = ''
-                return False
+                return ['']
+
             
         if self.orientation is 'vertical':
             # Buiten bord 
             if self.y - 1 < 0 and self.y + self.length >= self.board.height:
-                return False
+                return ['']
 
             # Positie vrij 
             if self.board.checkIfEmpty(self.x,self.y - 1) and \
             self.board.checkIfEmpty(self.x,self.y + self.length):
-                self.free = ['top', 'bot']
-                return True
-            elif self.board.checkIfEmpty(self.x,self.y - 1):
-                self.free = ['top'] 
-                return True
-            elif self.board.checkIfEmpty(self.x,self.y + self.length):
-                self.free = ['bot']
-                return True
-            else:
-                self.free = ''
-                return False
+                return ['top', 'bot']
 
-            ## Hier heb ik 'direction' aan toegevoegd, om niet meer afhankelijk te hoeven zijn
-            ## van self.free
+            elif self.board.checkIfEmpty(self.x,self.y - 1):
+                return ['top'] 
+
+            elif self.board.checkIfEmpty(self.x,self.y + self.length):
+                return ['bot']
+
+            else:
+                return ['']
+
     def move(self, direction):
 
         if direction == 'top':
@@ -142,20 +139,27 @@ class Car(object):
         else:
             return False
 
-def reverseLastMove(carToReverse):
-        tussen = []
-        moveToReverse = carToReverse.lastMove
-        if moveToReverse == ['left']:
-            tussen = ['right']
-        elif moveToReverse == ['right']:
-            tussen = ['left']
-        elif moveToReverse == ['top']:
-            tussen = ['bot']
-        elif moveToReverse == ['bot']:
-            tussen = ['top']
+def reverseLastMove(carToReverse, direction):
+        tussen = ''
+        if direction == 'left':
+            tussen = 'right'
+        elif direction == 'right':
+            tussen = 'left'
+        elif direction == 'top':
+            tussen = 'bot'
+        elif direction == 'bot':
+            tussen = 'top'
         carToReverse.move("%s" %tussen)
-        print ('Car reversed')
-        print ("reverse show")
+
+def possibleMoves(): 
+    if len(movesPerLevel[level]) == 0:
+            print ("moves per level leeg")
+            for currentCar in carList:
+                if currentCar.isCarFree()[0] != '':
+                    freeCars.append(currentCar)
+                    for direction in currentCar.isCarFree():
+                        movesPerLevel[level].append((currentCar, direction))
+
 
 def runSimulationGame1():
 
@@ -167,6 +171,7 @@ def runSimulationGame1():
     carList = []
     freeCars = []
     moveList = []
+    level = 0
     redCar = Car('horizontal', room, 3, 2, 2, 1)
 
     # Traffic
@@ -180,100 +185,82 @@ def runSimulationGame1():
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8] 
-
-    # Algoritme, stopt na win of x aantal zetten
-    ## Drie nieuwe variabelen toegevoegd die helpen het niveau bij te houden.
-    counter = 0
-    level = 0
     movesPerLevel = {}
     direction = ''
-    # while redCar.winCoordinates(5, 2) == False:
-    for i in range (0, 4):
+    counter = 0
+    reverseSwitched = False
+    while redCar.winCoordinates(5, 2) == False:
+
         room.show()
-                       
-        # Opslaan van huidige boardstate als hij nog niet in
-        # de storage staat
-        ## Reverse move maakt ook level eentje kleiner, en cleart de movesPerLevel
-        ## van het niveau dat achter gelaten wordt.
-        state = room.convertState()
         movesPerLevel[level] = movesPerLevel.get(level, [])
+        state = room.convertState()
+        # movesPerLevel[level] = movesPerLevel.get(level, [])
+        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
+        # checker = 0
+        # checker2 = 0
+
         if room.compareState(state) == False:
             room.saveState(state)
             for i in freeCars: 
                 i.moved = False
             print ('New state found')
+            reverseSwitched = False
         else:
+            reverseSwitched = True
             print ('No new state found: ')
             if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0])
-                moveList.pop(-1)
-                #room.show()
+                reverseLastMove(moveList[-1][0],moveList[-1][1])
+                moveList.pop()
                 moveCar.moved = True
                 movesPerLevel[level] = []
                 level = level - 2
             else: 
-                reverseLastMove(moveList[-1][0])
-                moveCar.moved = True
+                reverseLastMove(moveList[-1][0],moveList[-1][1])
+                moveList.pop()
                 movesPerLevel[level] = []
-                level = level - 1       	
+                level = level - 1       
             room.show()
-            print
-            print
-            print
-
-            # Kiest random car uit alle cars die vrijstaan en beweegt hem
-            ## Als je op een niveau komt waar al een keer alle moves voor zijn gevonden,
-            ## hoef je het niet nog een keer te checken. 
-            
+        
         if len(movesPerLevel[level]) == 0:
             print ("moves per level leeg")
             for currentCar in carList:
-                if currentCar.isCarFree():
+                if currentCar.isCarFree()[0] != '':
                     freeCars.append(currentCar)
-                    for direction in currentCar.free:
-                        movesPerLevel[level].append(currentCar)
-                        movesPerLevel[level].append(direction)
+                    checker3 = 0
+                    for i in range(0, len(currentCar.isCarFree())):
+                        direction = currentCar.isCarFree()[checker3]
+                        movesPerLevel[level].append((currentCar, direction))
+                        checker3 += 1
+        if reverseSwitched == True:
+            checker = 0
+            for i in movesPerLevel[level]: 
+                if movesPerLevel[level][checker][0].isCarFree() == '':
+                    movesPerLevel[level][checker].pop()
+                checker += 1
+            lengte = len(movesPerLevel[level])
+            for i in range(0, lengte):
+                auto = movesPerLevel[level][0][0]
+                direction = movesPerLevel[level][0][0].isCarFree()
+                checker3 = 0
+                # for i in range(0, len(direction)):
+                #     movesPerLevel[level].append((auto, direction[checker3]))
+                #     checker3 += 1
+                # movesPerLevel[level].pop(0)
 
-                        
-        # iterate door alle car objects in movesPerLevel en update self.free waarden automatisch
-        for i in movesPerLevel[level][::2]:
-            if i.isCarFree() == False:
-                movesPerLevel[level].pop(i)
-                movesPerLevel[level].pop(i)
-                        
+        moveCar = (movesPerLevel[level][0][0])
 
-        print (movesPerLevel[level])
-        #print ('Moves to be made this round:', movesPerLevel[level])
-            
-        ## Hier moet ie dus de eerste auto uit movesPerLevel pakken.
-        ## Wat ik probeer te fixxen is dat dat dan de eerste waarde in de list zou zijn.
-        ## Dictionaries zijn alleen het foute data type... Weet even niet welke ik wel
-        ## moet hebben.
-        ## Daarbij moet moveList nu, doordat we niet meer alleen op self.free af gaan,
-        ## de auto, maar ook de direction op slaan.
-        moveCar = (movesPerLevel[level][0])
-        print (moveCar)   
-        print ("This car is free:", moveCar.isCarFree(), ", Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.free)
-        moveList.append((moveCar, movesPerLevel[level][1]))
+        print ("Car ID", moveCar.carID, \
+                   "It can move to position(s):", moveCar.isCarFree())
+        
+        print (movesPerLevel[level][0][1])
 
-        ## Hier zou dan de tweede waarde de move zijn die hij moet uitvoeren.
-        # print movesPerLevel[level][1]
-        moveCar.move("%s" %movesPerLevel[level][1])
-        # print
-        # print
-        # print
-        # print ("Move Happened")
-        # room.show()
+        moveList.append(movesPerLevel[level][0])
 
-
-        moveCar.lastMove = movesPerLevel[level][1]
-            
-        ## Hier zou hij dan de zet die net gedaan is deleten uit de lijst. 
-        movesPerLevel[level].pop(0)
+        
+        moveCar.move("%s" %moveList[-1][1])
+        
         movesPerLevel[level].pop(0)    
 
-        # Update counters en print info
         level = level + 1
         counter = counter + 1
         print ("Counter: %i" %counter)
@@ -282,16 +269,6 @@ def runSimulationGame1():
         # maakt freeCars list weer leeg
         freeCars[:] = []
 
-        # print ("move show")
-        # print 
-        # print 
-        # room.show()
-        # print 
-        # print
-            # counter om loop eerder te breken
-            #if counter is 20:
-                #break
-            
     # toont het aantal unieke states/zetten die zijn gemaakt en
     # de moves die zijn gemaakt
     print ("States stored:")
