@@ -236,9 +236,9 @@ def runSimulationGame1():
 
         totaal += len(movesPerLevel[level])
 
-        print len(movesPerLevel[level])
+        print (len(movesPerLevel[level]))
         print ("totaal")
-        print totaal
+        print (totaal)
 
         # if reverseSwitched == True:
         #     # movesPerLevel[level] = []
@@ -271,19 +271,32 @@ def runSimulationGame1():
         #             checker3 += 1
         #         movesPerLevel[level].pop(0)
 
-        moveCar = (movesPerLevel[level][0][0])
+
+
+        """ Random keuze per level, weet nog niet 100% zeker of het werkt""" 
+
+        randomCar = random.choice(movesPerLevel[level])
+        print (randomCar)
+        moveCar = randomCar[0]
+        print (moveCar)
+
+        #moveCar = (movesPerLevel[level][0][0])
+        
 
         print ("Car ID", moveCar.carID, \
                    "It can move to position(s):", moveCar.isCarFree())
         
-        print (movesPerLevel[level][0][1])
+        #print (movesPerLevel[level][0][1])
+        print (randomCar[1])
 
-        moveList.append(movesPerLevel[level][0])
+        # moveList.append(movesPerLevel[level][0])
+        moveList.append(randomCar)
 
         
         moveCar.move("%s" %moveList[-1][1])
         
-        movesPerLevel[level].pop(0)    
+        #movesPerLevel[level].pop(0)
+        movesPerLevel[level].remove(randomCar)
 
         level = level + 1
         counter = counter + 1
