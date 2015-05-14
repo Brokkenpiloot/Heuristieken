@@ -139,6 +139,14 @@ class Car(object):
         else:
             return False
 
+    def altWinCoordinates(self):
+        tilesToCheck = self.board.width - (self.x + 2)
+        for i in range(0, tilesToCheck):
+            if self.board.tiles[self.y][self.x + 2] != 'empty':
+                return False
+        return True
+
+
 def reverseLastMove(carToReverse, direction):
         tussen = ''
         if direction == 'left':
@@ -189,7 +197,7 @@ def runSimulationGame1():
     direction = ''
     counter = 0
     reverseSwitched = False
-    while redCar.winCoordinates(5, 2) == False:
+    while not redCar.winCoordinates(5, 2) or not redCar.altWinCoordinates():
     # for i in range(0,1):
         reverseSwitched = False
         room.show()
