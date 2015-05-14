@@ -162,7 +162,7 @@ def possibleMoves():
 
 
 def runSimulationGame1():
-
+    totaal = 0
     room = Board(6, 6)
     # carID = 1
 
@@ -190,7 +190,8 @@ def runSimulationGame1():
     counter = 0
     reverseSwitched = False
     while redCar.winCoordinates(5, 2) == False:
-
+    # for i in range(0,1):
+        reverseSwitched = False
         room.show()
         movesPerLevel[level] = movesPerLevel.get(level, [])
         state = room.convertState()
@@ -211,17 +212,18 @@ def runSimulationGame1():
             if len(movesPerLevel[level - 1]) == 0:
                 reverseLastMove(moveList[-1][0],moveList[-1][1])
                 moveList.pop()
-                moveCar.moved = True
-                movesPerLevel[level] = []
+                reverseLastMove(moveList[-1][0],moveList[-1][1])
+                moveList.pop()
+                # movesPerLevel[level] = []
                 level = level - 2
             else: 
                 reverseLastMove(moveList[-1][0],moveList[-1][1])
                 moveList.pop()
-                movesPerLevel[level] = []
                 level = level - 1       
             room.show()
         
         if len(movesPerLevel[level]) == 0:
+            movesPerLevel[level] = []
             print ("moves per level leeg")
             for currentCar in carList:
                 if currentCar.isCarFree()[0] != '':
@@ -231,21 +233,43 @@ def runSimulationGame1():
                         direction = currentCar.isCarFree()[checker3]
                         movesPerLevel[level].append((currentCar, direction))
                         checker3 += 1
-        if reverseSwitched == True:
-            checker = 0
-            for i in movesPerLevel[level]: 
-                if movesPerLevel[level][checker][0].isCarFree() == '':
-                    movesPerLevel[level][checker].pop()
-                checker += 1
-            lengte = len(movesPerLevel[level])
-            for i in range(0, lengte):
-                auto = movesPerLevel[level][0][0]
-                direction = movesPerLevel[level][0][0].isCarFree()
-                checker3 = 0
-                # for i in range(0, len(direction)):
-                #     movesPerLevel[level].append((auto, direction[checker3]))
-                #     checker3 += 1
-                # movesPerLevel[level].pop(0)
+
+        totaal += len(movesPerLevel[level])
+
+        print len(movesPerLevel[level])
+        print ("totaal")
+        print totaal
+
+        # if reverseSwitched == True:
+        #     # movesPerLevel[level] = []
+        #     # for currentCar in carList:
+        #     #     if currentCar.isCarFree()[0] != '':
+        #     #         freeCars.append(currentCar)
+        #     #         checker3 = 0
+        #     #         for i in range(0, len(currentCar.isCarFree())):
+        #     #             direction = currentCar.isCarFree()[checker3]
+        #     #             movesPerLevel[level].append((currentCar, direction))
+        #     #             checker3 += 1
+
+        #     checker = 0
+        #     for i in movesPerLevel[level]:
+        #         if movesPerLevel[level][checker][0].isCarFree()[0] == '':
+        #             print ("popped dddddd")
+        #             movesPerLevel[level][checker].pop()
+        #             checker -= 1
+        #         checker += 1
+
+        #     lengte = len(movesPerLevel[level])
+        #     for i in range(0, lengte):
+        #         auto = movesPerLevel[level][0][0]
+        #         print auto
+        #         direction = auto.isCarFree()
+        #         print direction
+        #         checker3 = 0
+        #         for wer in range(0, len(direction)):
+        #             movesPerLevel[level].append((auto, direction[checker3]))
+        #             checker3 += 1
+        #         movesPerLevel[level].pop(0)
 
         moveCar = (movesPerLevel[level][0][0])
 
