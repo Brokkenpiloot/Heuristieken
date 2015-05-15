@@ -4,6 +4,7 @@
 # 
 
 import random
+import copy
 class Board(object):
     def __init__(self, width, height):
         self.height = height
@@ -168,7 +169,6 @@ def possibleMoves():
                     for direction in currentCar.isCarFree():
                         movesPerLevel[level].append((currentCar, direction))
 
-
 def runSimulationGame1():
     totaal = 0
     room = Board(6, 6)
@@ -178,8 +178,8 @@ def runSimulationGame1():
     # red Car
     carList = []
     freeCars = []
-    moveList = []
     level = 0
+    moveList = []
     redCar = Car('horizontal', room, 3, 2, 2, 1)
 
     # Traffic
@@ -197,7 +197,8 @@ def runSimulationGame1():
     direction = ''
     counter = 0
     reverseSwitched = False
-    while not redCar.winCoordinates(5, 2) or not redCar.altWinCoordinates():
+
+    while redCar.winCoordinates(5, 2) == False:
     # for i in range(0,1):
         reverseSwitched = False
         room.show()
@@ -244,67 +245,35 @@ def runSimulationGame1():
 
         totaal += len(movesPerLevel[level])
 
-        print (len(movesPerLevel[level]))
+        print len(movesPerLevel[level])
         print ("totaal")
-        print (totaal)
+        print totaal
 
-        # if reverseSwitched == True:
-        #     # movesPerLevel[level] = []
-        #     # for currentCar in carList:
-        #     #     if currentCar.isCarFree()[0] != '':
-        #     #         freeCars.append(currentCar)
-        #     #         checker3 = 0
-        #     #         for i in range(0, len(currentCar.isCarFree())):
-        #     #             direction = currentCar.isCarFree()[checker3]
-        #     #             movesPerLevel[level].append((currentCar, direction))
-        #     #             checker3 += 1
-
-        #     checker = 0
-        #     for i in movesPerLevel[level]:
-        #         if movesPerLevel[level][checker][0].isCarFree()[0] == '':
-        #             print ("popped dddddd")
-        #             movesPerLevel[level][checker].pop()
-        #             checker -= 1
-        #         checker += 1
-
-        #     lengte = len(movesPerLevel[level])
-        #     for i in range(0, lengte):
-        #         auto = movesPerLevel[level][0][0]
-        #         print auto
-        #         direction = auto.isCarFree()
-        #         print direction
-        #         checker3 = 0
-        #         for wer in range(0, len(direction)):
-        #             movesPerLevel[level].append((auto, direction[checker3]))
-        #             checker3 += 1
-        #         movesPerLevel[level].pop(0)
-
-
-
-        """ Random keuze per level, weet nog niet 100% zeker of het werkt""" 
-
+        # ########## Random version
         randomCar = random.choice(movesPerLevel[level])
         print (randomCar)
         moveCar = randomCar[0]
         print (moveCar)
-
-        #moveCar = (movesPerLevel[level][0][0])
-        
-
         print ("Car ID", moveCar.carID, \
                    "It can move to position(s):", moveCar.isCarFree())
-        
-        #print (movesPerLevel[level][0][1])
         print (randomCar[1])
-
-        # moveList.append(movesPerLevel[level][0])
         moveList.append(randomCar)
-
-        
         moveCar.move("%s" %moveList[-1][1])
-        
-        #movesPerLevel[level].pop(0)
         movesPerLevel[level].remove(randomCar)
+
+
+        # ####### normal version
+        # moveCar = (movesPerLevel[level][0][0])
+        # print ("Car ID", moveCar.carID, \
+        #            "It can move to position(s):", moveCar.isCarFree())
+        # print (movesPerLevel[level][0][1])
+        # moveList.append(movesPerLevel[level][0])
+        # moveCar.move("%s" %moveList[-1][1])
+        # movesPerLevel[level].pop(0)    
+
+
+
+
 
         level = level + 1
         counter = counter + 1
@@ -319,39 +288,7 @@ def runSimulationGame1():
     print ("States stored:")
     print (len(room.storage))
     room.show()
-
-    
-
-
-    # Volledige reset ter controle van movelist
-    totaal = 0
-    room = Board(6, 6)
-    counter = 0
-    
-    carList = []
-    redCar = Car('horizontal', room, 3, 2, 2, 1)
-    traffic1 = Car('vertical', room, 2, 0, 3, 2)
-    traffic2 = Car('horizontal', room, 3, 0, 2, 3)
-    traffic3 = Car('vertical', room, 5, 0, 3, 4)
-    traffic4 = Car('vertical', room, 3, 3, 3, 5)
-    traffic5 = Car('horizontal', room, 4, 3, 2, 6)
-    traffic6 = Car('vertical', room, 0, 4, 2, 7)
-    traffic7 = Car('horizontal', room, 1, 4, 2, 8)
-    traffic8 = Car('horizontal', room, 4, 5, 2, 9)
-    
-    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
-    
-    while not redCar.winCoordinates(5, 2):
-        moveCar = moveList[counter][0]
-        moveCar.move("%s" %moveList[counter][1])
-        counter = counter+1
-        room.show()
-
-    print ("moveList succesful!")
-        
-        
-    
-
+    print len(moveList)
 
     """   
 def runSimulationGame2(height, width):
