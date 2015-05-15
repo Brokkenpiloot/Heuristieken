@@ -319,7 +319,38 @@ def runSimulationGame1():
     print ("States stored:")
     print (len(room.storage))
     room.show()
-    return counter
+
+    
+
+
+    # Volledige reset ter controle van movelist
+    totaal = 0
+    room = Board(6, 6)
+    counter = 0
+    
+    carList = []
+    redCar = Car('horizontal', room, 3, 2, 2, 1)
+    traffic1 = Car('vertical', room, 2, 0, 3, 2)
+    traffic2 = Car('horizontal', room, 3, 0, 2, 3)
+    traffic3 = Car('vertical', room, 5, 0, 3, 4)
+    traffic4 = Car('vertical', room, 3, 3, 3, 5)
+    traffic5 = Car('horizontal', room, 4, 3, 2, 6)
+    traffic6 = Car('vertical', room, 0, 4, 2, 7)
+    traffic7 = Car('horizontal', room, 1, 4, 2, 8)
+    traffic8 = Car('horizontal', room, 4, 5, 2, 9)
+    
+    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
+    
+    while not redCar.winCoordinates(5, 2):
+        moveCar = moveList[counter][0]
+        moveCar.move("%s" %moveList[counter][1])
+        counter = counter+1
+        room.show()
+
+    print ("moveList succesful!")
+        
+        
+    
 
 
     """   
