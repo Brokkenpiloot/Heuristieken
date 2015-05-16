@@ -179,20 +179,21 @@ def possibleMoves():
                     for direction in currentCar.isCarFree():
                         movesPerLevel[level].append((currentCar, direction))
 
-def timer(simulation):
+def timer(simulation, numberOfLoops):
     timeList = []
     moveCountList = []
+    moveCount = 0
     # Runt simulatie 10 keer, returnt gemiddelde runtime en movecount
-    for i in range(10):      
+    for i in range(numberOfLoops):      
         start_time = timeit.default_timer()
         moveCount = simulation()
         moveCountList.append(moveCount)
         timeList.append(timeit.default_timer() - start_time)
-        #print("Runtime:")
-        #print(timeit.default_timer() - start_time)
+        print("Runtime:", timeit.default_timer() - start_time)
+        print("Moves:", moveCount)
     avgRuntime = sum(timeList)/len(timeList)
     avgMoves = sum(moveCountList)/len(moveCountList)
-    print ("Average Runtime:", avgRuntime, " seconds")
+    print ("Average Runtime:", avgRuntime, "seconds")
     print ("Average amount of moves used:", avgMoves)
     
     
