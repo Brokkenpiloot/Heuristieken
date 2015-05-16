@@ -5,6 +5,8 @@
 
 import random
 import copy
+import timeit
+
 class Board(object):
     def __init__(self, width, height):
         self.height = height
@@ -177,6 +179,24 @@ def possibleMoves():
                     for direction in currentCar.isCarFree():
                         movesPerLevel[level].append((currentCar, direction))
 
+def timer(simulation):
+    timeList = []
+    moveCountList = []
+    # Runt simulatie 10 keer, returnt gemiddelde runtime en movecount
+    for i in 10:      
+        start_time = timeit.default_timer()
+        moveCount = simulation()
+        moveCountList.append(moveCount)
+        timeList.append(timeit.default_timer() - start_time)
+        #print("Runtime:")
+        #print(timeit.default_timer() - start_time)
+    avgRuntime = sum(timeList)/len(timeList)
+    avgMoves = sum(moveCountList)/len(moveCountList)
+    print ("Average amount of moves used:", avgMoves)
+    
+    
+    
+
 def runSimulationGame1():
     totaal = 0
     room = Board(6, 6)
@@ -299,6 +319,7 @@ def runSimulationGame1():
     print (len(room.storage))
     room.show()
     print (len(moveList))
+    return counter
 
       
 def runSimulationGame2():
@@ -425,6 +446,7 @@ def runSimulationGame2():
     print (len(room.storage))
     room.show()
     print (len(moveList))
+    return counter
 
 
 def runSimulationGame3():
@@ -551,6 +573,7 @@ def runSimulationGame3():
     print (len(room.storage))
     room.show()
     print (len(moveList))
+    return counter
 
 
 def runSimulationGame4():
@@ -688,6 +711,7 @@ def runSimulationGame4():
     print (len(room.storage))
     room.show()
     print (len(moveList))
+    return counter
 
 def runSimulationGame5():
     totaal = 0
@@ -828,6 +852,7 @@ def runSimulationGame5():
     print (len(room.storage))
     room.show()
     print (len(moveList))
+    return counter
 
 
 def runSimulationGame6():
@@ -970,6 +995,7 @@ def runSimulationGame6():
     print (len(room.storage))
     room.show()
     print (len(moveList))
+    return counter
 
 def runSimulationGame7():
     totaal = 0
@@ -1132,3 +1158,4 @@ def runSimulationGame7():
     print (len(room.storage))
     room.show()
     print (len(moveList))
+    return counter
