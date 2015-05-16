@@ -973,7 +973,7 @@ def runSimulationGame6():
 
 def runSimulationGame7():
     totaal = 0
-    room = Board(11, 11)
+    room = Board(12, 12)
     carList = []
     freeCars = []
     level = 0
