@@ -182,12 +182,18 @@ def possibleMoves():
 def timer(simulation, numberOfLoops):
     timeList = []
     moveCountList = []
+    levelCountList = []
+    returnValues = []
+    levelCount = 0
     moveCount = 0
     # Runt simulatie 10 keer, returnt gemiddelde runtime en movecount
     for i in range(numberOfLoops):      
         start_time = timeit.default_timer()
-        moveCount = simulation()
+        returnValues = simulation()
+        moveCount = returnValues[0]
+        levelCount = returnValues[1]
         moveCountList.append(moveCount)
+        levelCountList.append(levelCount)
         timeList.append(timeit.default_timer() - start_time)
         print("Runtime:", timeit.default_timer() - start_time)
         print("Moves:", moveCount)
@@ -195,6 +201,7 @@ def timer(simulation, numberOfLoops):
     avgMoves = sum(moveCountList)/len(moveCountList)
     print ("Average Runtime:", avgRuntime, "seconds")
     print ("Average amount of moves used:", avgMoves)
+    print ("Shortest routes: ", levelCountList)
     
     
     
@@ -315,13 +322,16 @@ def runSimulationGame1():
         # maakt freeCars list weer leeg
         freeCars[:] = []
 
+        if counter == 40:
+            break
+
     # toont het aantal unieke states/zetten die zijn gemaakt en
     # de moves die zijn gemaakt
     print ("States stored:")
     print (len(room.storage))
     room.show()
     print (len(moveList))
-    return counter
+    return [counter, level]
 
       
 def runSimulationGame2():
