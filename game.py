@@ -156,6 +156,115 @@ class game(object):
         self.carList = []
 
     #def runAlgorithme():
+
+
+
+def simulation(room, carList):
+
+    totaal = 0
+    freeCars = []
+    level = 0
+    moveList = []
+    movesPerLevel = {}
+    direction = ''
+    counter = 0
+    reverseSwitched = False
+    winConHor = 5
+    winConVer = 2
+    print (carList[0])
+    print (carList[1])
+    while carList[0].winCoordinates(winConHor, winConVer) == False:
+    # for i in range(0,1):
+        reverseSwitched = False
+        room.show()
+        movesPerLevel[level] = movesPerLevel.get(level, [])
+        state = room.convertState()
+        # movesPerLevel[level] = movesPerLevel.get(level, [])
+        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
+        # checker = 0
+        # checker2 = 0
+
+        if room.compareState(state) == False:
+            room.saveState(state)
+            for i in freeCars: 
+                i.moved = False
+            print ('New state found')
+            reverseSwitched = False
+        else:
+            reverseSwitched = True
+            print ('No new state found: ')
+            if len(movesPerLevel[level - 1]) == 0:
+                reverseLastMove(moveList[-1][0],moveList[-1][1])
+                moveList.pop()
+                reverseLastMove(moveList[-1][0],moveList[-1][1])
+                moveList.pop()
+                # movesPerLevel[level] = []
+                level = level - 2
+            else: 
+                reverseLastMove(moveList[-1][0],moveList[-1][1])
+                moveList.pop()
+                level = level - 1       
+            room.show()
+        
+        if len(movesPerLevel[level]) == 0:
+            movesPerLevel[level] = []
+            print ("moves per level leeg")
+            for currentCar in carList:
+                if currentCar.isCarFree()[0] != '':
+                    freeCars.append(currentCar)
+                    checker3 = 0
+                    for i in range(0, len(currentCar.isCarFree())):
+                        direction = currentCar.isCarFree()[checker3]
+                        movesPerLevel[level].append((currentCar, direction))
+                        checker3 += 1
+
+        totaal += len(movesPerLevel[level])
+
+        print (len(movesPerLevel[level]))
+        print ("totaal")
+        print (totaal)
+
+        # ########## Random version
+        randomCar = random.choice(movesPerLevel[level])
+        print (randomCar)
+        moveCar = randomCar[0]
+        print (moveCar)
+        print ("Car ID", moveCar.carID, \
+                   "It can move to position(s):", moveCar.isCarFree())
+        print (randomCar[1])
+        moveList.append(randomCar)
+        moveCar.move("%s" %moveList[-1][1])
+        movesPerLevel[level].remove(randomCar)
+
+        
+        # ####### normal version
+        # moveCar = (movesPerLevel[level][0][0])
+        # print ("Car ID", moveCar.carID, \
+        #            "It can move to position(s):", moveCar.isCarFree())
+        # print (movesPerLevel[level][0][1])
+        # moveList.append(movesPerLevel[level][0])
+        # moveCar.move("%s" %moveList[-1][1])
+        # movesPerLevel[level].pop(0)    
+
+        level = level + 1
+        counter = counter + 1
+        print ("Counter: %i" %counter)
+        print ("Level: %i" %level)
+            
+        # maakt freeCars list weer leeg
+        freeCars[:] = []
+
+        if counter == 40:
+            break
+
+    # toont het aantal unieke states/zetten die zijn gemaakt en
+    # de moves die zijn gemaakt
+    print ("States stored:")
+    print (len(room.storage))
+    room.show()
+    print (len(moveList))
+    return [counter, level]
+    
         
 
 def reverseLastMove(carToReverse, direction):
@@ -205,13 +314,14 @@ def timer(simulation, numberOfLoops):
 
 
 
-def runBreadthSimulation1():
+    
+    
+    
+
+def game1():
     
     room = Board(6,6)
-    carList = []
-    freeCars = []
-    level = 0
-    moveList = []
+    
     redCar = Car('horizontal', room, 3, 2, 2, 1)
 
     # Traffic
@@ -224,154 +334,13 @@ def runBreadthSimulation1():
     traffic7 = Car('horizontal', room, 1, 4, 2, 8)
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
 
-    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8] 
-
-    """ PSEUDOCODE:
-    check possible moves for each car, put in moveList
-    For move in moveList:
-        Make move (checking for win condition)
-        revert move
-
-    """
-    
-    
-    
-
-def runSimulationGame1():
-    totaal = 0
-    room = Board(6, 6)
-    # carID = 1
-
-    # addHorizontalCar(orientation, room, x, y, length, carID)
-    # red Car
-    carList = []
-    freeCars = []
-    level = 0
-    moveList = []
-    redCar = Car('horizontal', room, 3, 2, 2, 1)
-
-    # Traffic
-    traffic1 = Car('vertical', room, 2, 0, 3, 2)
-    traffic2 = Car('horizontal', room, 3, 0, 2, 3)
-    traffic3 = Car('vertical', room, 5, 0, 3, 4)
-    traffic4 = Car('vertical', room, 3, 3, 3, 5)
-    traffic5 = Car('horizontal', room, 4, 3, 2, 6)
-    traffic6 = Car('vertical', room, 0, 4, 2, 7)
-    traffic7 = Car('horizontal', room, 1, 4, 2, 8)
-    traffic8 = Car('horizontal', room, 4, 5, 2, 9)
-    
-    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8] 
-    movesPerLevel = {}
-    direction = ''
-    counter = 0
-    reverseSwitched = False
-    winConHor = 5
-    winConVer = 2
-    
-    while redCar.winCoordinates(winConHor, winConVer) == False:
-    # for i in range(0,1):
-        reverseSwitched = False
-        room.show()
-        movesPerLevel[level] = movesPerLevel.get(level, [])
-        state = room.convertState()
-        # movesPerLevel[level] = movesPerLevel.get(level, [])
-        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
-        # checker = 0
-        # checker2 = 0
-
-        if room.compareState(state) == False:
-            room.saveState(state)
-            for i in freeCars: 
-                i.moved = False
-            print ('New state found')
-            reverseSwitched = False
-        else:
-            reverseSwitched = True
-            print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            room.show()
-        
-        if len(movesPerLevel[level]) == 0:
-            movesPerLevel[level] = []
-            print ("moves per level leeg")
-            for currentCar in carList:
-                if currentCar.isCarFree()[0] != '':
-                    freeCars.append(currentCar)
-                    checker3 = 0
-                    for i in range(0, len(currentCar.isCarFree())):
-                        direction = currentCar.isCarFree()[checker3]
-                        movesPerLevel[level].append((currentCar, direction))
-                        checker3 += 1
-
-        totaal += len(movesPerLevel[level])
-
-        print (len(movesPerLevel[level]))
-        print ("totaal")
-        print (totaal)
-
-        # ########## Random version
-        randomCar = random.choice(movesPerLevel[level])
-        print (randomCar)
-        moveCar = randomCar[0]
-        print (moveCar)
-        print ("Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.isCarFree())
-        print (randomCar[1])
-        moveList.append(randomCar)
-        moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].remove(randomCar)
-
-
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
-        # print ("Car ID", moveCar.carID, \
-        #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
-
-
-
-
-
-        level = level + 1
-        counter = counter + 1
-        print ("Counter: %i" %counter)
-        print ("Level: %i" %level)
-            
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-
-        if counter == 40:
-            break
-
-    # toont het aantal unieke states/zetten die zijn gemaakt en
-    # de moves die zijn gemaakt
-    print ("States stored:")
-    print (len(room.storage))
-    room.show()
-    print (len(moveList))
-    return [counter, level]
+    carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
+    return simulation(room, carList)
 
       
-def runSimulationGame2():
-    totaal = 0
+def game2():
     room = Board(6, 6)
-    carList = []
-    freeCars = []
-    level = 0
-    moveList = []
+
     
     # red car
     redCar = Car('horizontal', room, 2, 2, 2, 1)
@@ -391,114 +360,10 @@ def runSimulationGame2():
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12] 
-    movesPerLevel = {}
-    direction = ''
-    counter = 0
-    reverseSwitched = False
-    winConHor = 5
-    winConVer = 2
+    return simulation(room, carList)
 
-    while redCar.winCoordinates(winConHor, winConVer) == False:
-    # for i in range(0,1):
-        reverseSwitched = False
-        room.show()
-        movesPerLevel[level] = movesPerLevel.get(level, [])
-        state = room.convertState()
-        # movesPerLevel[level] = movesPerLevel.get(level, [])
-        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
-        # checker = 0
-        # checker2 = 0
-
-        if room.compareState(state) == False:
-            room.saveState(state)
-            for i in freeCars: 
-                i.moved = False
-            print ('New state found')
-            reverseSwitched = False
-        else:
-            reverseSwitched = True
-            print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            room.show()
-        
-        if len(movesPerLevel[level]) == 0:
-            movesPerLevel[level] = []
-            print ("moves per level leeg")
-            for currentCar in carList:
-                if currentCar.isCarFree()[0] != '':
-                    freeCars.append(currentCar)
-                    checker3 = 0
-                    for i in range(0, len(currentCar.isCarFree())):
-                        direction = currentCar.isCarFree()[checker3]
-                        movesPerLevel[level].append((currentCar, direction))
-                        checker3 += 1
-
-        totaal += len(movesPerLevel[level])
-
-        print (len(movesPerLevel[level]))
-        print ("totaal")
-        print (totaal)
-
-        # ########## Random version
-        randomCar = random.choice(movesPerLevel[level])
-        print (randomCar)
-        moveCar = randomCar[0]
-        print (moveCar)
-        print ("Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.isCarFree())
-        print (randomCar[1])
-        moveList.append(randomCar)
-        moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].remove(randomCar)
-
-
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
-        # print ("Car ID", moveCar.carID, \
-        #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
-
-
-
-
-
-        level = level + 1
-        counter = counter + 1
-        print ("Counter: %i" %counter)
-        print ("Level: %i" %level)
-            
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-
-    # toont het aantal unieke states/zetten die zijn gemaakt en
-    # de moves die zijn gemaakt
-    print ("States stored:")
-    print (len(room.storage))
-    room.show()
-    print (len(moveList))
-    return counter
-
-
-def runSimulationGame3():
-    totaal = 0
+def game3():
     room = Board(6, 6)
-    carList = []
-    freeCars = []
-    level = 0
-    moveList = []
     
     # red car
     redCar = Car('horizontal', room, 0, 2, 2, 1)
@@ -517,109 +382,12 @@ def runSimulationGame3():
     traffic12 = Car('horizontal', room, 4, 4, 2, 13)
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
-               traffic8, traffic9, traffic10, traffic11, traffic12] 
-    movesPerLevel = {}
-    direction = ''
-    counter = 0
-    reverseSwitched = False
-    winConHor = 5
-    winConVer = 2
-
-    while redCar.winCoordinates(winConHor, winConVer) == False:
-    # for i in range(0,1):
-        reverseSwitched = False
-        room.show()
-        movesPerLevel[level] = movesPerLevel.get(level, [])
-        state = room.convertState()
-        # movesPerLevel[level] = movesPerLevel.get(level, [])
-        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
-        # checker = 0
-        # checker2 = 0
-
-        if room.compareState(state) == False:
-            room.saveState(state)
-            for i in freeCars: 
-                i.moved = False
-            print ('New state found')
-            reverseSwitched = False
-        else:
-            reverseSwitched = True
-            print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            room.show()
-        
-        if len(movesPerLevel[level]) == 0:
-            movesPerLevel[level] = []
-            print ("moves per level leeg")
-            for currentCar in carList:
-                if currentCar.isCarFree()[0] != '':
-                    freeCars.append(currentCar)
-                    checker3 = 0
-                    for i in range(0, len(currentCar.isCarFree())):
-                        direction = currentCar.isCarFree()[checker3]
-                        movesPerLevel[level].append((currentCar, direction))
-                        checker3 += 1
-
-        totaal += len(movesPerLevel[level])
-
-        print (len(movesPerLevel[level]))
-        print ("totaal")
-        print (totaal)
-
-        # ########## Random version
-        randomCar = random.choice(movesPerLevel[level])
-        print (randomCar)
-        moveCar = randomCar[0]
-        print (moveCar)
-        print ("Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.isCarFree())
-        print (randomCar[1])
-        moveList.append(randomCar)
-        moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].remove(randomCar)
+               traffic8, traffic9, traffic10, traffic11, traffic12]
+    return simulation(room, carList)
+    
 
 
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
-        # print ("Car ID", moveCar.carID, \
-        #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
-
-
-
-
-
-        level = level + 1
-        counter = counter + 1
-        print ("Counter: %i" %counter)
-        print ("Level: %i" %level)
-            
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-
-    # toont het aantal unieke states/zetten die zijn gemaakt en
-    # de moves die zijn gemaakt
-    print ("States stored:")
-    print (len(room.storage))
-    room.show()
-    print (len(moveList))
-    return counter
-
-
-def runSimulationGame4():
+def game4():
     totaal = 0
     room = Board(9, 9)
     carList = []
@@ -656,113 +424,12 @@ def runSimulationGame4():
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21] 
-    movesPerLevel = {}
-    direction = ''
-    counter = 0
-    reverseSwitched = False
-    winConHor = 8
-    winConVer = 4
+    return simulation(room, carList)
 
-    while redCar.winCoordinates(winConHor, winConVer) == False:
-    # for i in range(0,1):
-        reverseSwitched = False
-        room.show()
-        movesPerLevel[level] = movesPerLevel.get(level, [])
-        state = room.convertState()
-        # movesPerLevel[level] = movesPerLevel.get(level, [])
-        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
-        # checker = 0
-        # checker2 = 0
+def game5():
 
-        if room.compareState(state) == False:
-            room.saveState(state)
-            for i in freeCars: 
-                i.moved = False
-            print ('New state found')
-            reverseSwitched = False
-        else:
-            reverseSwitched = True
-            print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            room.show()
-        
-        if len(movesPerLevel[level]) == 0:
-            movesPerLevel[level] = []
-            print ("moves per level leeg")
-            for currentCar in carList:
-                if currentCar.isCarFree()[0] != '':
-                    freeCars.append(currentCar)
-                    checker3 = 0
-                    for i in range(0, len(currentCar.isCarFree())):
-                        direction = currentCar.isCarFree()[checker3]
-                        movesPerLevel[level].append((currentCar, direction))
-                        checker3 += 1
-
-        totaal += len(movesPerLevel[level])
-
-        print (len(movesPerLevel[level]))
-        print ("totaal")
-        print (totaal)
-
-        # ########## Random version
-        randomCar = random.choice(movesPerLevel[level])
-        print (randomCar)
-        moveCar = randomCar[0]
-        print (moveCar)
-        print ("Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.isCarFree())
-        print (randomCar[1])
-        moveList.append(randomCar)
-        moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].remove(randomCar)
-
-
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
-        # print ("Car ID", moveCar.carID, \
-        #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
-
-
-
-
-
-        level = level + 1
-        counter = counter + 1
-        print ("Counter: %i" %counter)
-        print ("Level: %i" %level)
-            
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-
-    # toont het aantal unieke states/zetten die zijn gemaakt en
-    # de moves die zijn gemaakt
-    print ("States stored:")
-    print (len(room.storage))
-    room.show()
-    print (len(moveList))
-    return counter
-
-def runSimulationGame5():
-    totaal = 0
     room = Board(9, 9)
-    carList = []
-    freeCars = []
-    level = 0
-    moveList = []
+
     
     # red car
     redCar = Car('horizontal', room, 6, 4, 2, 1)
@@ -796,115 +463,15 @@ def runSimulationGame5():
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
-               traffic22, traffic23, traffic24] 
-    movesPerLevel = {}
-    direction = ''
-    counter = 0
-    reverseSwitched = False
-    winConHor = 8
-    winConVer = 4
-
-    while redCar.winCoordinates(winConHor, winConVer) == False:
-    # for i in range(0,1):
-        reverseSwitched = False
-        room.show()
-        movesPerLevel[level] = movesPerLevel.get(level, [])
-        state = room.convertState()
-        # movesPerLevel[level] = movesPerLevel.get(level, [])
-        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
-        # checker = 0
-        # checker2 = 0
-
-        if room.compareState(state) == False:
-            room.saveState(state)
-            for i in freeCars: 
-                i.moved = False
-            print ('New state found')
-            reverseSwitched = False
-        else:
-            reverseSwitched = True
-            print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            room.show()
-        
-        if len(movesPerLevel[level]) == 0:
-            movesPerLevel[level] = []
-            print ("moves per level leeg")
-            for currentCar in carList:
-                if currentCar.isCarFree()[0] != '':
-                    freeCars.append(currentCar)
-                    checker3 = 0
-                    for i in range(0, len(currentCar.isCarFree())):
-                        direction = currentCar.isCarFree()[checker3]
-                        movesPerLevel[level].append((currentCar, direction))
-                        checker3 += 1
-
-        totaal += len(movesPerLevel[level])
-
-        print (len(movesPerLevel[level]))
-        print ("totaal")
-        print (totaal)
-
-        # ########## Random version
-        randomCar = random.choice(movesPerLevel[level])
-        print (randomCar)
-        moveCar = randomCar[0]
-        print (moveCar)
-        print ("Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.isCarFree())
-        print (randomCar[1])
-        moveList.append(randomCar)
-        moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].remove(randomCar)
+               traffic22, traffic23, traffic24]
+    return simulation(room, carList)
+    
 
 
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
-        # print ("Car ID", moveCar.carID, \
-        #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
+def game6():
 
-
-
-
-
-        level = level + 1
-        counter = counter + 1
-        print ("Counter: %i" %counter)
-        print ("Level: %i" %level)
-            
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-
-    # toont het aantal unieke states/zetten die zijn gemaakt en
-    # de moves die zijn gemaakt
-    print ("States stored:")
-    print (len(room.storage))
-    room.show()
-    print (len(moveList))
-    return counter
-
-
-def runSimulationGame6():
-    totaal = 0
     room = Board(9, 9)
-    carList = []
-    freeCars = []
-    level = 0
-    moveList = []
+   
     
     # red car
     redCar = Car('horizontal', room, 0, 4, 2, 1)
@@ -940,113 +507,11 @@ def runSimulationGame6():
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
                traffic22, traffic23, traffic24, traffic25] 
-    movesPerLevel = {}
-    direction = ''
-    counter = 0
-    reverseSwitched = False
-    winConHor = 8
-    winConVer = 4
+    return simulation(room, carList)
 
-    while redCar.winCoordinates(winConHor, winConVer) == False:
-    # for i in range(0,1):
-        reverseSwitched = False
-        room.show()
-        movesPerLevel[level] = movesPerLevel.get(level, [])
-        state = room.convertState()
-        # movesPerLevel[level] = movesPerLevel.get(level, [])
-        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
-        # checker = 0
-        # checker2 = 0
+def game7():
 
-        if room.compareState(state) == False:
-            room.saveState(state)
-            for i in freeCars: 
-                i.moved = False
-            print ('New state found')
-            reverseSwitched = False
-        else:
-            reverseSwitched = True
-            print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            room.show()
-        
-        if len(movesPerLevel[level]) == 0:
-            movesPerLevel[level] = []
-            print ("moves per level leeg")
-            for currentCar in carList:
-                if currentCar.isCarFree()[0] != '':
-                    freeCars.append(currentCar)
-                    checker3 = 0
-                    for i in range(0, len(currentCar.isCarFree())):
-                        direction = currentCar.isCarFree()[checker3]
-                        movesPerLevel[level].append((currentCar, direction))
-                        checker3 += 1
-
-        totaal += len(movesPerLevel[level])
-
-        print (len(movesPerLevel[level]))
-        print ("totaal")
-        print (totaal)
-
-        # ########## Random version
-        randomCar = random.choice(movesPerLevel[level])
-        print (randomCar)
-        moveCar = randomCar[0]
-        print (moveCar)
-        print ("Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.isCarFree())
-        print (randomCar[1])
-        moveList.append(randomCar)
-        moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].remove(randomCar)
-
-
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
-        # print ("Car ID", moveCar.carID, \
-        #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
-
-
-
-
-
-        level = level + 1
-        counter = counter + 1
-        print ("Counter: %i" %counter)
-        print ("Level: %i" %level)
-            
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-
-    # toont het aantal unieke states/zetten die zijn gemaakt en
-    # de moves die zijn gemaakt
-    print ("States stored:")
-    print (len(room.storage))
-    room.show()
-    print (len(moveList))
-    return counter
-
-def runSimulationGame7():
-    totaal = 0
     room = Board(12, 12)
-    carList = []
-    freeCars = []
-    level = 0
-    moveList = []
     
     # red car
     redCar = Car('horizontal', room, 2, 5, 2, 1)
@@ -1102,103 +567,6 @@ def runSimulationGame7():
                traffic22, traffic23, traffic24, traffic25, traffic26, traffic27, traffic28, \
                traffic29, traffic30, traffic31, traffic32, traffic33, traffic34, traffic35, \
                traffic36, traffic37, traffic38, traffic39, traffic40, traffic41, traffic42, \
-               traffic43] 
-    movesPerLevel = {}
-    direction = ''
-    counter = 0
-    reverseSwitched = False
-    winConHor = 11
-    winConVer = 5
-
-    while redCar.winCoordinates(winConHor, winConVer) == False:
-    # for i in range(0,1):
-        reverseSwitched = False
-        room.show()
-        movesPerLevel[level] = movesPerLevel.get(level, [])
-        state = room.convertState()
-        # movesPerLevel[level] = movesPerLevel.get(level, [])
-        # movesPerLevel2[level] = movesPerLevel2.get(level, [])
-        # checker = 0
-        # checker2 = 0
-
-        if room.compareState(state) == False:
-            room.saveState(state)
-            for i in freeCars: 
-                i.moved = False
-            print ('New state found')
-            reverseSwitched = False
-        else:
-            reverseSwitched = True
-            print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            room.show()
-        
-        if len(movesPerLevel[level]) == 0:
-            movesPerLevel[level] = []
-            print ("moves per level leeg")
-            for currentCar in carList:
-                if currentCar.isCarFree()[0] != '':
-                    freeCars.append(currentCar)
-                    checker3 = 0
-                    for i in range(0, len(currentCar.isCarFree())):
-                        direction = currentCar.isCarFree()[checker3]
-                        movesPerLevel[level].append((currentCar, direction))
-                        checker3 += 1
-
-        totaal += len(movesPerLevel[level])
-
-        print (len(movesPerLevel[level]))
-        print ("totaal")
-        print (totaal)
-
-        # ########## Random version
-        randomCar = random.choice(movesPerLevel[level])
-        print (randomCar)
-        moveCar = randomCar[0]
-        print (moveCar)
-        print ("Car ID", moveCar.carID, \
-                   "It can move to position(s):", moveCar.isCarFree())
-        print (randomCar[1])
-        moveList.append(randomCar)
-        moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].remove(randomCar)
-
-
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
-        # print ("Car ID", moveCar.carID, \
-        #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
-
-
-
-
-
-        level = level + 1
-        counter = counter + 1
-        print ("Counter: %i" %counter)
-        print ("Level: %i" %level)
-            
-        # maakt freeCars list weer leeg
-        freeCars[:] = []
-
-    # toont het aantal unieke states/zetten die zijn gemaakt en
-    # de moves die zijn gemaakt
-    print ("States stored:")
-    print (len(room.storage))
-    room.show()
-    print (len(moveList))
-    return counter
+               traffic43]
+    return simulation(room, carList)
+    
