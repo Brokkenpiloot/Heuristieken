@@ -149,17 +149,10 @@ class Car(object):
                 return False
         return True
 
-# Eerste skelet van een game class
-class game(object):
-    def __init__(self, board):
-        self.board = board
-        self.carList = []
-
-    #def runAlgorithme():
 
 
 
-def simulation(room, carList):
+def simulation(room, carList, breakPoint):
 
     totaal = 0
     freeCars = []
@@ -254,7 +247,7 @@ def simulation(room, carList):
         # maakt freeCars list weer leeg
         freeCars[:] = []
 
-        if counter == 40:
+        if level == breakPoint:
             break
 
     # toont het aantal unieke states/zetten die zijn gemaakt en
@@ -288,7 +281,7 @@ def possibleMoves():
                     for direction in currentCar.isCarFree():
                         movesPerLevel[level].append((currentCar, direction))
 
-def timer(simulation, numberOfLoops):
+def timer(simulation, numberOfLoops, breakPoint):
     timeList = []
     moveCountList = []
     levelCountList = []
@@ -298,19 +291,26 @@ def timer(simulation, numberOfLoops):
     # Runt simulatie 10 keer, returnt gemiddelde runtime en movecount
     for i in range(numberOfLoops):      
         start_time = timeit.default_timer()
-        returnValues = simulation()
+        returnValues = simulation(breakPoint)
         moveCount = returnValues[0]
         levelCount = returnValues[1]
         moveCountList.append(moveCount)
-        levelCountList.append(levelCount)
-        timeList.append(timeit.default_timer() - start_time)
+        if levelCount < breakPoint:
+                    levelCountList.append(levelCount)
+                    breakPoint = levelCount
+
+        timeList.append(timeit.default_timer() - start_time)        
         print("Runtime:", timeit.default_timer() - start_time)
         print("Moves:", moveCount)
     avgRuntime = sum(timeList)/len(timeList)
     avgMoves = sum(moveCountList)/len(moveCountList)
     print ("Average Runtime:", avgRuntime, "seconds")
     print ("Average amount of moves used:", avgMoves)
-    print ("Shortest routes: ", levelCountList)
+    if len(levelCountList) > 0:
+        print ("Shortest routes: ", levelCountList)
+    else:
+        print ("No solutions found")
+    
 
 
 
@@ -318,7 +318,7 @@ def timer(simulation, numberOfLoops):
     
     
 
-def game1():
+def game1(breakPoint):
     
     room = Board(6,6)
     
@@ -335,10 +335,10 @@ def game1():
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
 
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
-    return simulation(room, carList)
+    return simulation(room, carList, breakPoint)
 
       
-def game2():
+def game2(breakPoint):
     room = Board(6, 6)
 
     
@@ -360,9 +360,9 @@ def game2():
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12] 
-    return simulation(room, carList)
+    return simulation(room, carList, breakPoint)
 
-def game3():
+def game3(breakPoint):
     room = Board(6, 6)
     
     # red car
@@ -383,11 +383,11 @@ def game3():
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12]
-    return simulation(room, carList)
+    return simulation(room, carList, breakPoint)
     
 
 
-def game4():
+def game4(breakPoint):
     totaal = 0
     room = Board(9, 9)
     carList = []
@@ -424,9 +424,9 @@ def game4():
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21] 
-    return simulation(room, carList)
+    return simulation(room, carList, breakPoint)
 
-def game5():
+def game5(breakPoint):
 
     room = Board(9, 9)
 
@@ -464,11 +464,11 @@ def game5():
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
                traffic22, traffic23, traffic24]
-    return simulation(room, carList)
+    return simulation(room, carList, breakPoint)
     
 
 
-def game6():
+def game6(breakPoint):
 
     room = Board(9, 9)
    
@@ -507,9 +507,9 @@ def game6():
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
                traffic22, traffic23, traffic24, traffic25] 
-    return simulation(room, carList)
+    return simulation(room, carList, breakPoint)
 
-def game7():
+def game7(breakPoint):
 
     room = Board(12, 12)
     
@@ -568,5 +568,5 @@ def game7():
                traffic29, traffic30, traffic31, traffic32, traffic33, traffic34, traffic35, \
                traffic36, traffic37, traffic38, traffic39, traffic40, traffic41, traffic42, \
                traffic43]
-    return simulation(room, carList)
+    return simulation(room, carList, breakPoint)
     
