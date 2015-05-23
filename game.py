@@ -6,7 +6,7 @@
 import random
 import copy
 import timeit
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 class Board(object):
     def __init__(self, width, height):
@@ -153,7 +153,7 @@ class Car(object):
 
 
 
-def simulation(room, carList, breakPoint):
+def simulation(room, carList, breakPoint, solutions):
 
     totaal = 0
     freeCars = []
@@ -165,9 +165,11 @@ def simulation(room, carList, breakPoint):
     reverseSwitched = False
     winConHor = 5
     winConVer = 2
+    solutionCounter = 0
+    solutionLevels = []
     # print (carList[0])
     # print (carList[1])
-    while carList[0].winCoordinates(winConHor, winConVer) == False:
+    while solutionCounter < solutions:
     # for i in range(0,1):
         reverseSwitched = False
         # room.show()
@@ -178,7 +180,7 @@ def simulation(room, carList, breakPoint):
         # checker = 0
         # checker2 = 0
 
-        if room.compareState(state) == False:
+        if room.compareState(state) == False and level < breakPoint:
             room.saveState(state)
             for i in freeCars: 
                 i.moved = False
@@ -218,7 +220,6 @@ def simulation(room, carList, breakPoint):
         # print ("totaal")
         # print (totaal)
 
-        # ########## Random version
         randomCar = random.choice(movesPerLevel[level])
         # print (randomCar)
         moveCar = randomCar[0]
@@ -231,25 +232,27 @@ def simulation(room, carList, breakPoint):
         movesPerLevel[level].remove(randomCar)
 
         
-        # ####### normal version
-        # moveCar = (movesPerLevel[level][0][0])
+        """# ####### normal version
+        moveCar = (movesPerLevel[level][0][0])
         # print ("Car ID", moveCar.carID, \
         #            "It can move to position(s):", moveCar.isCarFree())
-        # print (movesPerLevel[level][0][1])
-        # moveList.append(movesPerLevel[level][0])
-        # moveCar.move("%s" %moveList[-1][1])
-        # movesPerLevel[level].pop(0)    
+        moveList.append(movesPerLevel[level][0])
+        moveCar.move("%s" %moveList[-1][1])
+        movesPerLevel[level].pop(0)   """ 
 
         level = level + 1
-        counter = counter + 1
-        # print ("Counter: %i" %counter)
-        # print ("Level: %i" %level)
+        counter = counter + 1 
             
         # maakt freeCars list weer leeg
         freeCars[:] = []
 
-        if level == breakPoint:
-            break
+        if carList[0].winCoordinates(winConHor, winConVer) == True:
+            solutionCounter = solutionCounter + 1
+            solutionLevels.append(level)
+            breakPoint = level
+            room.show()
+            print ("Counter: %i" %counter)
+            print ("Level: %i" %level)
 
     # toont het aantal unieke states/zetten die zijn gemaakt en
     # de moves die zijn gemaakt
@@ -257,6 +260,8 @@ def simulation(room, carList, breakPoint):
     # print (len(room.storage))
     # room.show()
     # print (len(moveList))
+    for i in range(len(solutionLevels)):
+        print (solutionLevels[i])
     return [counter, level]
     
         
@@ -316,14 +321,14 @@ def timer(simulation, numberOfLoops, breakPoint):
         print ("No solutions found")
     radius = runCounter
     area = levelCountList
-    plt.plot(radius, area, label='Game 2')
+    """plt.plot(radius, area, label='Game 2')
     plt.xlabel('Runs')
     plt.ylabel('Lengte Oplossing')
     plt.title('Oplossing van Game 2 over tijd')
     plt.legend()
-    plt.show()
+    plt.show()"""
 
-def game1(breakPoint):
+def game1(breakPoint, solutions):
 
     room = Board(6,6)
     
@@ -340,7 +345,7 @@ def game1(breakPoint):
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
 
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
-    return simulation(room, carList, breakPoint)
+    return simulation(room, carList, breakPoint, solutions)
 
       
 def game2(breakPoint):
