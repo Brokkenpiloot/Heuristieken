@@ -329,14 +329,18 @@ def timer(simulation, numberOfLoops, breakPoint):
         print ("Shortest routes: ", levelCountList)
     else:
         print ("No solutions found")
+
+    for i in range(len(levelCountList)):
+        runCounter.append(i)
+    
     radius = runCounter
     area = levelCountList
-    """plt.plot(radius, area, label='Game 2')
+    plt.plot(radius, area, label='Game 2')
     plt.xlabel('Runs')
     plt.ylabel('Lengte Oplossing')
     plt.title('Oplossing van Game 2 over tijd')
     plt.legend()
-    plt.show()"""
+    plt.show()
 
 def game1(breakPoint, solutions):
 
