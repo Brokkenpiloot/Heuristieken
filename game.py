@@ -311,7 +311,7 @@ def timer(simulation, numberOfLoops, breakPoint):
     for i in range(numberOfLoops):   
         runCounter.append(i) 
         start_time = timeit.default_timer()
-        returnValues = simulation(breakPoint, 100000)
+        returnValues = simulation(breakPoint, 1)
         moveCount = returnValues[0]
         solutionLevels = returnValues[1]
         moveCountList.append(moveCount)
