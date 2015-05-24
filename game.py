@@ -181,26 +181,38 @@ def simulation(room, carList, breakPoint, solutions):
         # checker2 = 0
 
         if room.compareState(state) == False and level < breakPoint:
-            room.saveState(state)
+            room.saveState(state)                       
             for i in freeCars: 
                 i.moved = False
             # print ('New state found')
             reverseSwitched = False
+        elif level == 0:
+            for i in freeCars: 
+                i.moved = False
+            # print ('New state found')
+            reverseSwitched = False            
         else:
             reverseSwitched = True
-            # print ('No new state found: ')
-            if len(movesPerLevel[level - 1]) == 0:
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                # movesPerLevel[level] = []
-                level = level - 2
-            else: 
-                reverseLastMove(moveList[-1][0],moveList[-1][1])
-                moveList.pop()
-                level = level - 1       
-            # room.show()
+            for i in range(len(movesPerLevel)):
+                if level == 0:
+                    print ("went back to start")
+                    break;
+                # gaat terug zolang hij geen level vindt waar nog mogelijke
+                # moves op staan
+                if len(movesPerLevel[level - 1]) == 0:
+                    reverseLastMove(moveList[-1][0],moveList[-1][1])
+                    moveList.pop()
+                    level = level - 1
+                elif len(movesPerLevel[level - 1]) > 0:
+                    reverseLastMove(moveList[-1][0],moveList[-1][1])
+                    moveList.pop()
+                    level = level - 1
+                    break;       
+            # room.show()       
+            #room.show()
+        if level == 0 and counter > 50:
+            break;
+
         
         if len(movesPerLevel[level]) == 0:
             movesPerLevel[level] = []
@@ -220,6 +232,7 @@ def simulation(room, carList, breakPoint, solutions):
         # print ("totaal")
         # print (totaal)
 
+        # ####### random version
         randomCar = random.choice(movesPerLevel[level])
         # print (randomCar)
         moveCar = randomCar[0]
@@ -238,7 +251,7 @@ def simulation(room, carList, breakPoint, solutions):
         #            "It can move to position(s):", moveCar.isCarFree())
         moveList.append(movesPerLevel[level][0])
         moveCar.move("%s" %moveList[-1][1])
-        movesPerLevel[level].pop(0)   """ 
+        movesPerLevel[level].pop(0)"""   
 
         level = level + 1
         counter = counter + 1 
@@ -249,10 +262,12 @@ def simulation(room, carList, breakPoint, solutions):
         if carList[0].winCoordinates(winConHor, winConVer) == True:
             solutionCounter = solutionCounter + 1
             solutionLevels.append(level)
-            breakPoint = level
-            room.show()
-            print ("Counter: %i" %counter)
-            print ("Level: %i" %level)
+            breakPoint = level          
+            #room.show()            
+            #print ("Counter: %i" %counter)
+            #print ("Level: %i" %level)
+
+            
 
     # toont het aantal unieke states/zetten die zijn gemaakt en
     # de moves die zijn gemaakt
@@ -260,9 +275,7 @@ def simulation(room, carList, breakPoint, solutions):
     # print (len(room.storage))
     # room.show()
     # print (len(moveList))
-    for i in range(len(solutionLevels)):
-        print (solutionLevels[i])
-    return [counter, level]
+    return [counter, solutionLevels]
     
         
 
@@ -295,19 +308,16 @@ def timer(simulation, numberOfLoops, breakPoint):
     levelCount = 0
     moveCount = 0
     runCounter = []
-    # Runt simulatie 10 keer, returnt gemiddelde runtime en movecount
     for i in range(numberOfLoops):   
         runCounter.append(i) 
         start_time = timeit.default_timer()
-        returnValues = simulation(breakPoint)
+        returnValues = simulation(breakPoint, 100000)
         moveCount = returnValues[0]
-        levelCount = returnValues[1]
+        solutionLevels = returnValues[1]
         moveCountList.append(moveCount)
-        if levelCount < breakPoint:
-            levelCountList.append(levelCount)
-            breakPoint = levelCount
-        else:
-            levelCountList.append(breakPoint)
+        
+        levelCountList.extend(solutionLevels)
+        breakPoint = levelCountList[-1]
         timeList.append(timeit.default_timer() - start_time)        
         print("Runtime:", timeit.default_timer() - start_time)
         print("Moves:", moveCount)
@@ -348,7 +358,7 @@ def game1(breakPoint, solutions):
     return simulation(room, carList, breakPoint, solutions)
 
       
-def game2(breakPoint):
+def game2(breakPoint, solutions):
     room = Board(6, 6)
 
     
@@ -370,9 +380,9 @@ def game2(breakPoint):
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12] 
-    return simulation(room, carList, breakPoint)
+    return simulation(room, carList, breakPoint, solutions)
 
-def game3(breakPoint):
+def game3(breakPoint, solutions):
     room = Board(6, 6)
     
     # red car
@@ -393,11 +403,11 @@ def game3(breakPoint):
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12]
-    return simulation(room, carList, breakPoint)
+    return simulation(room, carList, breakPoint, solutions)
     
 
 
-def game4(breakPoint):
+def game4(breakPoint, solutions):
     totaal = 0
     room = Board(9, 9)
     carList = []
@@ -434,9 +444,9 @@ def game4(breakPoint):
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21] 
-    return simulation(room, carList, breakPoint)
+    return simulation(room, carList, breakPoint, solutions)
 
-def game5(breakPoint):
+def game5(breakPoint, solutions):
 
     room = Board(9, 9)
 
@@ -474,11 +484,11 @@ def game5(breakPoint):
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
                traffic22, traffic23, traffic24]
-    return simulation(room, carList, breakPoint)
+    return simulation(room, carList, breakPoint, solutions)
     
 
 
-def game6(breakPoint):
+def game6(breakPoint, solutions):
 
     room = Board(9, 9)
    
@@ -517,9 +527,9 @@ def game6(breakPoint):
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
                traffic22, traffic23, traffic24, traffic25] 
-    return simulation(room, carList, breakPoint)
+    return simulation(room, carList, breakPoint, solutions)
 
-def game7(breakPoint):
+def game7(breakPoint, solutions):
 
     room = Board(12, 12)
     
@@ -578,4 +588,4 @@ def game7(breakPoint):
                traffic29, traffic30, traffic31, traffic32, traffic33, traffic34, traffic35, \
                traffic36, traffic37, traffic38, traffic39, traffic40, traffic41, traffic42, \
                traffic43]
-    return simulation(room, carList, breakPoint)
+    return simulation(room, carList, breakPoint, solutions)
