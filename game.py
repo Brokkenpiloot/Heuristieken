@@ -352,7 +352,7 @@ def timer(simulation, numberOfLoops, breakPoint):
     plt.ylim((bottomLimit,topLimit))
     plt.xlim((0,len(runCounter)))
     plt.legend()
-    plt.show()
+    plt.show()"""
     for i in range(0, len(timeList)):
         runCounter.append(i)
     radius = runCounter
