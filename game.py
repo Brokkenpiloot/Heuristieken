@@ -6,7 +6,7 @@
 import random
 import copy
 import timeit
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 class Board(object):
     def __init__(self, width, height):
@@ -153,7 +153,7 @@ class Car(object):
 
 
 
-def simulation(room, carList, breakPoint, solutions):
+def simulation(room, carList, breakPoint, solutions, winConHor, winConVer):
 
     totaal = 0
     freeCars = []
@@ -163,8 +163,6 @@ def simulation(room, carList, breakPoint, solutions):
     direction = ''
     counter = 0
     reverseSwitched = False
-    winConHor = 5
-    winConVer = 2
     solutionCounter = 0
     solutionLevels = []
     # print (carList[0])
@@ -259,13 +257,13 @@ def simulation(room, carList, breakPoint, solutions):
         # maakt freeCars list weer leeg
         freeCars[:] = []
 
-        if carList[0].winCoordinates(winConHor, winConVer) == True:
+        if carList[0].winCoordinates(winConHor, winConVer) == True and level < breakPoint:
             solutionCounter = solutionCounter + 1
             solutionLevels.append(level)
             breakPoint = level          
-            #room.show()            
+            room.show()            
             #print ("Counter: %i" %counter)
-            #print ("Level: %i" %level)
+            print ("Level: %i" %level)
 
             
 
@@ -308,10 +306,9 @@ def timer(simulation, numberOfLoops, breakPoint):
     levelCount = 0
     moveCount = 0
     runCounter = []
-    for i in range(numberOfLoops):   
-        runCounter.append(i) 
+    for i in range(numberOfLoops):    
         start_time = timeit.default_timer()
-        returnValues = simulation(breakPoint, 1)
+        returnValues = simulation(breakPoint, 100000)
         moveCount = returnValues[0]
         solutionLevels = returnValues[1]
         moveCountList.append(moveCount)
@@ -330,13 +327,15 @@ def timer(simulation, numberOfLoops, breakPoint):
     else:
         print ("No solutions found")
 
-    for i in range(len(levelCountList)):
+    for i in range(0, len(levelCountList)):
         runCounter.append(i)
+    print(len(levelCountList))
+    print(len(runCounter))
     
     radius = runCounter
     area = levelCountList
     plt.plot(radius, area, label='Game 2')
-    plt.xlabel('Runs')
+    plt.xlabel('Oplossingen')
     plt.ylabel('Lengte Oplossing')
     plt.title('Oplossing van Game 2 over tijd')
     plt.legend()
@@ -345,6 +344,9 @@ def timer(simulation, numberOfLoops, breakPoint):
 def game1(breakPoint, solutions):
 
     room = Board(6,6)
+    
+    winConHor = 5
+    winConVer = 2
     
     redCar = Car('horizontal', room, 3, 2, 2, 1)
 
@@ -359,11 +361,14 @@ def game1(breakPoint, solutions):
     traffic8 = Car('horizontal', room, 4, 5, 2, 9)
 
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, traffic8]
-    return simulation(room, carList, breakPoint, solutions)
+    return simulation(room, carList, breakPoint, solutions, winConHor, winConVer)
 
       
 def game2(breakPoint, solutions):
     room = Board(6, 6)
+    
+    winConHor = 5
+    winConVer = 2
 
     
     # red car
@@ -384,10 +389,13 @@ def game2(breakPoint, solutions):
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12] 
-    return simulation(room, carList, breakPoint, solutions)
+    return simulation(room, carList, breakPoint, solutions, winConHor, winConVer)
 
 def game3(breakPoint, solutions):
     room = Board(6, 6)
+    
+    winConHor = 5
+    winConVer = 2
     
     # red car
     redCar = Car('horizontal', room, 0, 2, 2, 1)
@@ -407,17 +415,16 @@ def game3(breakPoint, solutions):
     
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12]
-    return simulation(room, carList, breakPoint, solutions)
+    return simulation(room, carList, breakPoint, solutions, winConHor, winConVer)
     
 
 
 def game4(breakPoint, solutions):
-    totaal = 0
     room = Board(9, 9)
     carList = []
-    freeCars = []
-    level = 0
-    moveList = []
+    
+    winConHor = 8
+    winConVer = 4
     
     # red car
     redCar = Car('horizontal', room, 1, 4, 2, 1)
@@ -448,11 +455,14 @@ def game4(breakPoint, solutions):
     carList = [redCar, traffic1, traffic2, traffic3, traffic4, traffic5, traffic6, traffic7, \
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21] 
-    return simulation(room, carList, breakPoint, solutions)
+    return simulation(room, carList, breakPoint, solutions, winConHor, winConVer)
 
 def game5(breakPoint, solutions):
 
     room = Board(9, 9)
+    
+    winConHor = 8
+    winConVer = 4
 
     
     # red car
@@ -488,13 +498,16 @@ def game5(breakPoint, solutions):
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
                traffic22, traffic23, traffic24]
-    return simulation(room, carList, breakPoint, solutions)
+    return simulation(room, carList, breakPoint, solutions, winConHor, winConVer)
     
 
 
 def game6(breakPoint, solutions):
 
     room = Board(9, 9)
+    
+    winConHor = 8
+    winConVer = 4
    
     
     # red car
@@ -531,11 +544,14 @@ def game6(breakPoint, solutions):
                traffic8, traffic9, traffic10, traffic11, traffic12, traffic13, traffic14, \
                traffic15, traffic16, traffic17, traffic18, traffic19, traffic20, traffic21, \
                traffic22, traffic23, traffic24, traffic25] 
-    return simulation(room, carList, breakPoint, solutions)
+    return simulation(room, carList, breakPoint, solutions, winConHor, winConVer)
 
 def game7(breakPoint, solutions):
 
     room = Board(12, 12)
+    
+    winConHor = 10
+    winConVer = 5
     
     # red car
     redCar = Car('horizontal', room, 2, 5, 2, 1)
@@ -592,4 +608,4 @@ def game7(breakPoint, solutions):
                traffic29, traffic30, traffic31, traffic32, traffic33, traffic34, traffic35, \
                traffic36, traffic37, traffic38, traffic39, traffic40, traffic41, traffic42, \
                traffic43]
-    return simulation(room, carList, breakPoint, solutions)
+    return simulation(room, carList, breakPoint, solutions, winConHor, winConVer)
