@@ -165,6 +165,8 @@ def simulation(room, carList, breakPoint, solutions, winConHor, winConVer):
     reverseSwitched = False
     solutionCounter = 0
     solutionLevels = []
+    timeList = []
+    start_time = timeit.default_timer()  
     # print (carList[0])
     # print (carList[1])
     while solutionCounter < solutions:
@@ -256,13 +258,22 @@ def simulation(room, carList, breakPoint, solutions, winConHor, winConVer):
             
         # maakt freeCars list weer leeg
         freeCars[:] = []
+        currentTime = (timeit.default_timer() - start_time)
+        if currentTime > 1800.0:
+            timeList.append(timeit.default_timer() - start_time)
+            print ("No new states found for 30 minutes")
+            break;
+            
 
         if carList[0].winCoordinates(winConHor, winConVer) == True and level < breakPoint:
+            timeList.append(timeit.default_timer() - start_time)        
+            print("Runtime:", timeit.default_timer() - start_time)
             solutionCounter = solutionCounter + 1
             solutionLevels.append(level)
             breakPoint = level          
-            room.show()            
-            #print ("Counter: %i" %counter)
+            room.show()
+            start_time = timeit.default_timer()            
+            print ("Counter: %i" %counter)
             print ("Level: %i" %level)
 
             
@@ -273,7 +284,7 @@ def simulation(room, carList, breakPoint, solutions, winConHor, winConVer):
     # print (len(room.storage))
     # room.show()
     # print (len(moveList))
-    return [counter, solutionLevels]
+    return [counter, solutionLevels, timeList]
     
         
 
@@ -299,34 +310,30 @@ def possibleMoves():
                         movesPerLevel[level].append((currentCar, direction))
 
 def timer(simulation, numberOfLoops, breakPoint):
-    timeList = []
+    
     moveCountList = []
     levelCountList = []
     returnValues = []
-    levelCount = 0
+    timeList = []
     moveCount = 0
     runCounter = []
+    solutions = int(raw_input("Number of solutions?: "))
     for i in range(numberOfLoops):    
-        start_time = timeit.default_timer()
-        returnValues = simulation(breakPoint, 100000)
+        returnValues = simulation(breakPoint, solutions)
         moveCount = returnValues[0]
         solutionLevels = returnValues[1]
         moveCountList.append(moveCount)
-        
+        timeList.extend(returnValues[2])
         levelCountList.extend(solutionLevels)
-        breakPoint = levelCountList[-1]
-        timeList.append(timeit.default_timer() - start_time)        
-        print("Runtime:", timeit.default_timer() - start_time)
+        breakPoint = levelCountList[-1]        
         print("Moves:", moveCount)
-    avgRuntime = sum(timeList)/len(timeList)
     avgMoves = sum(moveCountList)/len(moveCountList)
-    print ("Average Runtime:", avgRuntime, "seconds")
     print ("Average amount of moves used:", avgMoves)
     if len(levelCountList) > 0:
         print ("Shortest routes: ", levelCountList)
     else:
         print ("No solutions found")
-
+        
     for i in range(0, len(levelCountList)):
         runCounter.append(i)
     print(len(levelCountList))
@@ -334,12 +341,31 @@ def timer(simulation, numberOfLoops, breakPoint):
     
     radius = runCounter
     area = levelCountList
-    plt.plot(radius, area, label='Game 2')
-    plt.xlabel('Oplossingen')
+    plt.plot(radius, area)
+    topLimit = levelCountList[0]
+    topLimit = topLimit*1.1
+    bottomLimit = levelCountList[-1]
+    bottomLimit = bottomLimit*0.9
+    plt.xlabel('Aantal Oplossingen')
     plt.ylabel('Lengte Oplossing')
-    plt.title('Oplossing van Game 2 over tijd')
+    plt.title('Game 7')
+    plt.ylim((bottomLimit,topLimit))
+    plt.xlim((0,len(runCounter)))
     plt.legend()
     plt.show()
+    for i in range(0, len(timeList)):
+        runCounter.append(i)
+    radius = runCounter
+    area = timeList
+    plt.plot(radius, area)
+    plt.xlabel('Aantal Oplossingen')
+    plt.ylabel('Tijd in Seconden')
+    plt.title('Game 7')
+    plt.xlim((0,len(runCounter)))
+    plt.legend()
+    plt.show()"""    
+    
+    
 
 def game1(breakPoint, solutions):
 
@@ -550,7 +576,7 @@ def game7(breakPoint, solutions):
 
     room = Board(12, 12)
     
-    winConHor = 10
+    winConHor = 11
     winConVer = 5
     
     # red car
