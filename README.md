@@ -11,7 +11,8 @@ Unieke borden kunnen handmatig ingevoerd worden maar is door de complexiteit van
 
 Om dit programma te kunnen runnen dient eerst matplotlib geinstaleerd te worden via matplotlib.org. Hier vind men ook uitgebreide documentatie en guides.
 
-Het algoritme wordt op de volgende manier gerund: timer(game, aantal loops, maximale diepte oplossing).
+Het algoritme wordt op de volgende manier gerund: timer(game, aantal loops, maximale diepte oplossing). Bij het runnen wordt de gebruiker gevraagd om het aantal oplossingen dat het algoritme dient te vinden in te voeren. 
+Aan de hand hiervan wordt gedefinieerd of het Random algoritme wordt gebruikt (bij 1 oplossing), dan wel het Self-improving algoritme (bij meer dan 1 oplossing).
 
 
 
